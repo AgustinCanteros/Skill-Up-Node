@@ -5,21 +5,25 @@ module.exports = {
       id: {
         allowNull: false,
         autoIncrement: true,
+        primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      description: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
+      description: Sequelize.STRING,
       amount: {
         type: Sequelize.DECIMAL,
         allowNull: false,
       },
       userId: {
-        type: Sequelize.STRING,
+        references: {
+          key: "id",
+        },
+        type: Sequelize.INTEGER,
       },
       categoryId: {
-        type: Sequelize.STRING,
+        references: {
+          key: "id",
+        },
+        type: Sequelize.INTEGER,
       },
       date: {
         type: Sequelize.DATE,
