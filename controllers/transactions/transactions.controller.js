@@ -6,6 +6,7 @@ const { Transactions } = require("../../database/models");
 module.exports = {
   put: catchAsync(async (req, res, next) => {
     try {
+      const id = req.params.id;
       const response = await Transactions.update(req.body, {
         where: { id: `${id}` },
       });
