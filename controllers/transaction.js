@@ -34,7 +34,7 @@ module.exports = {
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
-        `[Error retrieving index] - [index - GET]: ${error.message}`
+        `[Error retrieving Transaction] - [Transaction - POST]: ${error.message}`
       );
       next(httpError);
     }
