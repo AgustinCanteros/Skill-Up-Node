@@ -1,10 +1,10 @@
 const express = require('express')
-const { put } = require('../../controllers/transactions/transactions.controller')
+const { put } = require('../../controllers/transactions/')
+const { requestValidation } = require('../../middlewares');
+const { putValidation } = require('../../schemas/transaction');
 
 const router = express.Router();
 
-//pendiente configurarcion de middleware para  que la petición 
-//contenga los campos user, category, amount y date
-router.put('/transactions/:id', put);
+router.put('/transactions/:id', requestValidation(putValidation), put);
 
 module.exports = router

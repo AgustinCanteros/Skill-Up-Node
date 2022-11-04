@@ -7,7 +7,7 @@ module.exports = {
   put: catchAsync(async (req, res, next) => {
     try {
       const id = req.params.id;
-      const validation = await Transactions.findAll(req.body, {
+      const validation = await Transactions.findAll( {
         where: { id: `${id}` },
       });
       if (validation) {
