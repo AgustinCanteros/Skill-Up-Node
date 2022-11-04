@@ -1,5 +1,5 @@
 const express = require('express');
-const { postCreateTransaction } = require('../controllers/transaction');
+const { postCreateTransaction } = require('../controllers/transactions');
 const postTransactionSchema = require('../schemas/transaction/postTransactionSchema');
 const {
     validateRequestSchema,
