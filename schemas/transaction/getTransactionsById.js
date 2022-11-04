@@ -1,8 +1,7 @@
-const { checkShecma } = require("express-validator");
 const { ErrorObject } = require("../../helpers/error");
 
 module.exports = {
-  getValidationById: checkShecma({
+  getValidationById: {
     userId: {
       in: ["query"],
       errorMessage: "ID is worn",
@@ -20,5 +19,5 @@ module.exports = {
         },
       },
     },
-  }),
+  }
 };
