@@ -1,9 +1,8 @@
-const { checkShecma } = require("express-validator");
 const { Transactions } = require("../../database/models");
 const { ErrorObject } = require("../../helpers");
 
 module.exports = {
-  deleteValidation: checkShecma({
+  deleteValidation: {
     id: {
       in: ["params", "query"],
       errorMessage: "ID is wrong",
@@ -22,5 +21,5 @@ module.exports = {
         },
       },
     },
-  }),
+  }
 };
