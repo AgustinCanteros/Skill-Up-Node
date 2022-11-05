@@ -12,8 +12,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.hasMany(models.Transaction, {foreignKey: "userId"});
-      User.belongsTo(models.Role, {foreignKey: "roleId"});
+      // User.hasMany(models.Transaction, {foreignKey: "userId"});
+      // User.belongsTo(models.Role, {foreignKey: "roleId"});
     }
   };
   User.init({
@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     softDeletes: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'User',
+    modelName: 'Users',
   });
   return User;
 };
