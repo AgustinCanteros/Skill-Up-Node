@@ -17,20 +17,38 @@ module.exports = {
       },
     },
   },
-  isNull: {
+  firstNameNull: {
     custom: {
       options: async (value, { req }) => {
         if (!req.body.firstName) {
           throw new ErrorObject("firstName is null");
         }
+      },
+    },
+  },
+  lastNameNull: {
+    custom: {
+      options: async (value, { req }) => {
         if (!req.body.lastName) {
           throw new ErrorObject("lastName is null");
         }
-        if (!req.body.password) {
-          throw new ErrorObject("password is null");
-        }
+      },
+    },
+  },
+  emailNull: {
+    custom: {
+      options: async (value, { req }) => {
         if (!req.body.email) {
           throw new ErrorObject("email is null");
+        }
+      },
+    },
+  },
+  passwordNull: {
+    custom: {
+      options: async (value, { req }) => {
+        if (!req.body.password) {
+          throw new ErrorObject("password is null");
         }
       },
     },
