@@ -14,15 +14,11 @@ module.exports = {
         allowNull: false,
       },
       userId: {
-        references: {
-          key: "id",
-        },
+        references: { model: "Users", key: "id" },
         type: Sequelize.INTEGER,
       },
       categoryId: {
-        references: {
-          key: "id",
-        },
+        references: { model: "Categories", key: "id" },
         type: Sequelize.INTEGER,
       },
       date: {

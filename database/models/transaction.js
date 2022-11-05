@@ -14,11 +14,6 @@ module.exports = (sequelize, DataTypes) => {
   }
   Transaction.init(
     {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        type: DataTypes.INTEGER,
-      },
       description: {
         allowNull: true,
         type: DataTypes.STRING,
