@@ -39,4 +39,22 @@ module.exports = {
       next(httpError);
     }
   }),
+  getTransactionsById: catchAsync(async (req, res, next) => {
+    try {
+      const response = await Transaction.findAll({
+        where: { userId: `${idQuery}` },
+      });
+      endpointResponse({
+        res,
+        message: "successfully",
+        body: response,
+      });
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error retrieving Transactions] - [Transactions - GET]: ${error.message}`
+      );
+      next(httpError);
+    }
+  }),
 };

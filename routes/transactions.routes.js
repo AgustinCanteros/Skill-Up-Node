@@ -12,4 +12,5 @@ const router = express.Router();
 
 router.get('/transactions',validateRequestSchema(getValidationById), getTransactionsById);
 router.post('/', validateRequestSchema(postTransactionSchema), postCreateTransaction);
+
 module.exports = router;
