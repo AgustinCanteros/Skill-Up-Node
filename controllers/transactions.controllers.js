@@ -4,6 +4,40 @@ const { catchAsync } = require("../helpers/catchAsync");
 const { Transactions } = require("../database/models");
 
 module.exports = {
+  postCreateTransaction: catchAsync(async (req, res, next) => {
+    try {
+      const { description, amount, date, userId, categoryId, user, category } =
+        req.body;
+
+      await Transaction.create({
+        description,
+        amount,
+        date,
+        userId,
+        categoryId,
+      });
+
+      const body = {
+        description,
+        amount,
+        date,
+        user,
+        category,
+      };
+
+      endpointResponse({
+        res,
+        message: 'Transaction created successfully.',
+        body,
+      });
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error retrieving Transaction] - [Transaction - POST]: ${error.message}`
+      );
+      next(httpError);
+    }
+  }),
   put: catchAsync(async (req, res, next) => {
     try {
       const id = req.params.id;
