@@ -30,7 +30,7 @@ module.exports = {
       endpointResponse({
         res,
         message: "successfully",
-        body: response,
+        body: req.body,
       });
     } catch (error) {
       const httpError = createHttpError(
