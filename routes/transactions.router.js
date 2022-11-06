@@ -15,10 +15,14 @@ router.get(
   validateRequestSchema(getTransactionSchema),
   getFindTransaction
 );
+router.put("/:id", validateRequestSchema(putValidation), put);
 router.post(
   "/",
   validateRequestSchema(postTransactionSchema),
   postCreateTransaction
 );
+
+const { put } = require("../controllers/transactions.controller");
+const putValidation = require("../schemas/transaction/putTransactionShema");
 
 module.exports = router;
