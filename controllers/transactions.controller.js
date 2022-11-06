@@ -52,7 +52,6 @@ module.exports = {
           })
         : endpointResponse({
             res,
-            code: 400,
             message: "No Transactions on DB",
           });
     } catch (error) {
