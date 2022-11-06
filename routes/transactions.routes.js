@@ -4,13 +4,13 @@ const postTransactionSchema = require('../schemas/transaction/postTransactionSch
 const {
     validateRequestSchema,
   } = require('../middlewares/validation/validate-schema.middleware');
-const { getTransactionsById } = require('../controllers/transactions');
-const { getValidationById } = require('../schemas/transaction');
+const { getTransactionsById } = require('../controllers/transactions.controllers');
+const getValidationById = require('../schemas/transaction/getTransactionsSchemaById');
 
 const router = express.Router();
 
 
-router.get('/transactions',validateRequestSchema(getValidationById), getTransactionsById);
+router.get('/',validateRequestSchema(getValidationById), getTransactionsById);
 router.post('/', validateRequestSchema(postTransactionSchema), postCreateTransaction);
 
 module.exports = router;
