@@ -1,11 +1,19 @@
-const express = require('express');
-const { postCreateTransaction } = require('../controllers/transactions.controller');
-const postTransactionSchema = require('../schemas/transaction/postTransactionSchema');
+const express = require("express");
 const {
-    validateRequestSchema,
-  } = require('../middlewares/validation/validate-schema.middleware');
+  postCreateTransaction,
+  getFindTransaction,
+} = require("../controllers/transactions.controller");
+const postTransactionSchema = require("../schemas/transaction/postTransactionSchema");
+const {
+  validateRequestSchema,
+} = require("../middlewares/validation/validate-schema.middleware");
 const router = express.Router();
 
-router.post('/', validateRequestSchema(postTransactionSchema), postCreateTransaction);
+router.get("/:id", getFindTransaction);
+router.post(
+  "/",
+  // validateRequestSchema(postTransactionSchema),
+  postCreateTransaction
+);
 
 module.exports = router;
