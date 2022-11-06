@@ -54,6 +54,42 @@ module.exports = {
       next(httpError);
     }
   }),
+  getUserById: catchAsync(async (req, res, next) => {
+    const id = req.params.id;
+    
+    if(!id){
+      endpointResponse({ 
+        res,
+        code:422,
+        message: "Missing Id",
+        body: response,
+      })
+    }
+
+    try {
+      const response = await Users.findByPk(id, {
+        attributes: ["firstName", "lastName", "email", "createdAt"],
+      });
+
+      response
+        ? endpointResponse({
+            res,
+            message: "User obtained successfully",
+            body: response,
+          })
+        : endpointResponse({
+            res,
+            status: 400,
+            message: "No User for that ID",
+          });
+    } catch (error) {
+      const httpError = createError(
+        error.statusCode,
+        `[Error retrieving user by ID] - [user - GET]: ${error.message}`
+      );
+      next(httpError);
+    }
+  }),
   deleteUser: catchAsync(async (req, res, next) => {
     try {
       const { id } = req.params;
