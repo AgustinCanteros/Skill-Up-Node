@@ -2,6 +2,7 @@ const createHttpError = require("http-errors");
 const { Transactions } = require("../database/models");
 const { endpointResponse } = require("../helpers/success");
 const { catchAsync } = require("../helpers/catchAsync");
+const { ErrorObject } = require("../helpers/error");
 
 // example of a controller. First call the service, then build the controller method
 module.exports = {
@@ -25,11 +26,13 @@ module.exports = {
   getFindTransaction: catchAsync(async (req, res, next) => {
     try {
       const { id } = req.params;
-      const response = await Transactions.findAll({ where: { id } });
-
+      const response = await Transactions.findByPk(id);
+      if (!response) {
+        throw new ErrorObject("The transaction could not be found", 404);
+      }
       endpointResponse({
         res,
-        message: "Transaction created successfully.",
+        message: "Transaction found successfully.",
         body: response,
       });
     } catch (error) {
