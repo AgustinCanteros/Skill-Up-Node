@@ -61,18 +61,11 @@ module.exports = {
       const response = await Users.findByPk(id, {
         attributes: ["firstName", "lastName", "email", "createdAt"],
       });
-
-      response
-        ? endpointResponse({
+      endpointResponse({
             res,
             message: "User obtained successfully",
             body: response,
           })
-        : endpointResponse({
-            res,
-            status: 400,
-            message: "No User for that ID",
-          });
     } catch (error) {
       const httpError = createError(
         error.statusCode,
