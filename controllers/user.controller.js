@@ -56,15 +56,6 @@ module.exports = {
   }),
   getUserById: catchAsync(async (req, res, next) => {
     const id = req.params.id;
-    
-    if(!id){
-      endpointResponse({ 
-        res,
-        code:422,
-        message: "Missing Id",
-        body: response,
-      })
-    }
 
     try {
       const response = await Users.findByPk(id, {
