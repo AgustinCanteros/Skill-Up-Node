@@ -9,7 +9,11 @@ const {
 } = require("../middlewares/validation/validate-schema.middleware");
 const router = express.Router();
 
-router.get("/:id", getFindTransaction);
+router.get(
+  "/:id",
+  // validateRequestSchema(getTransactionSchema),
+  getFindTransaction
+);
 router.post(
   "/",
   // validateRequestSchema(postTransactionSchema),
