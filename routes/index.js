@@ -1,8 +1,8 @@
 const express = require('express')
 const { get } = require('../controllers/index')
-const transactionRoutes = require('./transactions.routes');
-const usersRoutes = require('./users.routes')
-const categoriesRoutes = require('./categories.routes');
+const transactionRoutes = require('./transactions.router');
+const usersRoutes = require('./users.router')
+const categoriesRoutes = require('./categories.router');
 
 const router = express.Router()
 
