@@ -2,7 +2,7 @@ const createError = require("http-errors");
 const bcrypt = require("bcrypt");
 const { endpointResponse } = require("../helpers/success");
 const { catchAsync } = require("../helpers/catchAsync");
-const { User } = require("../database/models");
+const { Users } = require("../database/models");
 
 async function encryptPassword(password) {
   const salt = await bcrypt.genSalt(10);
@@ -14,7 +14,7 @@ module.exports = {
     try {
       const { firstName, lastName, email, password, roleId, avatar } = req.body;
 
-      const user = await User.create({
+      const user = await Users.create({
         firstName,
         lastName,
         email,
