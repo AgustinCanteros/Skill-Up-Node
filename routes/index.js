@@ -1,6 +1,6 @@
 const express = require('express')
-const transactionRoutes = require('./transactions.routes');
-const usersRoutes = require('./users.routes')
+const transactionRoutes = require('./transactions.router');
+const usersRoutes = require('./users.router')
 
 const router = express.Router()
 
