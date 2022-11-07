@@ -29,6 +29,7 @@ module.exports = {
       next(httpError);
     }
   }),
+
   getAllUsers: catchAsync(async (req, res, next) => {
     try {
       const response = await Users.findAll({
@@ -54,6 +55,7 @@ module.exports = {
       next(httpError);
     }
   }),
+
   deleteUser: catchAsync(async (req, res, next) => {
     try {
       const { id } = req.params;
@@ -63,6 +65,50 @@ module.exports = {
       endpointResponse({ res, message: "successfully deleted user", body: user });
     } catch (error) {
       const httpError = createError(error.statusCode, error.message);
+      next(httpError);
+    }
+  }),
+
+  editUser: catchAsync(async (req, res, next) => {
+    try {
+      const { id } = req.params
+      const { firstName, lastName, email, password, avatar, roleId } = req.body
+
+      await Users.update({
+        firstName,
+        lastName,
+        email,
+        password: await encryptPassword(password),
+        avatar,
+        roleId
+      },
+      {
+        where: {id}
+      })
+      
+      endpointResponse({res, message: "User was edited"})
+    }catch(error){
+      const httpError = createError(error.statusCode, error.message);
+      next(httpError);
+    }
+  }),
+  getUserById: catchAsync(async (req, res, next) => {
+    const id = req.params.id;
+
+    try {
+      const response = await Users.findByPk(id, {
+        attributes: ["firstName", "lastName", "email", "createdAt"],
+      });
+      endpointResponse({
+            res,
+            message: "User obtained successfully",
+            body: response,
+          })
+    } catch (error) {
+      const httpError = createError(
+        error.statusCode,
+        `[Error retrieving user by ID] - [user - GET]: ${error.message}`
+      );
       next(httpError);
     }
   }),
