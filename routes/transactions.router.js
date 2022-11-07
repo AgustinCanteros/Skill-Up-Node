@@ -6,6 +6,7 @@ const {
 } = require("../controllers/transactions.controller");
 const postTransactionSchema = require("../schemas/transaction/postTransactionSchema");
 const getTransactionSchema = require("../schemas/transaction/getTrensactionSchema");
+const putValidation = require("../schemas/transaction/putTransactionShema");
 const {
   validateRequestSchema,
 } = require("../middlewares/validation/validate-schema.middleware");
