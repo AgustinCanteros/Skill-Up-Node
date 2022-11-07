@@ -1,17 +1,15 @@
 const { ErrorObject } = require("../../helpers/error");
-const { Users} = require('../../database/models');
+const { Users } = require("../../database/models");
 
 module.exports = {
-  userId:{
-    in: ['query'],
-    isNumeric: {
-      errorMessage: 'UserId must be numeric.',
-    },
+  userId: {
     custom: {
       options: async (userId, { req }) => {
         try {
-          const user = await Users.findByPk(userId);
-          if (!user) throw new ErrorObject('User not found.', 404);
+          if (req.query.userId) {
+            const user = await Users.findByPk(userId);
+            if (!user) throw new ErrorObject("User not found. Check the data entered", 404);
+          }
           // pendiente validación de sesion
           // const User = req.session;
           // if (!(userId === User.id || User.rol === "admin")) {
@@ -22,5 +20,5 @@ module.exports = {
         }
       },
     },
-  }
+  },
 };
