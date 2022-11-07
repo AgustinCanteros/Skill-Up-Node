@@ -1,5 +1,6 @@
 const express = require("express");
 const {
+  put,
   postCreateTransaction,
   getFindTransaction,
   getAllTransactions,
@@ -24,8 +25,5 @@ router.post(
   postCreateTransaction
 );
 router.get("/", getAllTransactions);
-
-const { put } = require("../controllers/transactions.controller");
-const putValidation = require("../schemas/transaction/putTransactionShema");
 
 module.exports = router;
