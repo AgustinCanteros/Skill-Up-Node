@@ -1,12 +1,3 @@
-const createHttpError = require("http-errors");
-const { endpointResponse } = require("../helpers/success");
-const { catchAsync } = require("../helpers/catchAsync");
-const { Transactions } = require("../database/models");
-
-module.exports = {
-  postCreateTransaction: catchAsync(async (req, res, next) => {
-    try {
-      const response = await Transactions.create(req.body);
 
       endpointResponse({
         res,
@@ -43,8 +34,18 @@ module.exports = {
   getAllTransactions: catchAsync(async (req, res, next) => {
     try {
       const response = await Transactions.findAll();
-
-      response.length
+      const idQuery = req.query.userId;
+      if (idQuery) {
+        const responseId = await Transactions.findAll({
+          where: { userId: `${idQuery}` },
+        });
+        endpointResponse({
+          res,
+          message: "successfully",
+          body: responseId,
+        });
+      } else {
+        response.length
         ? endpointResponse({
             res,
             message: "Transactions obtained successfully",
@@ -54,10 +55,30 @@ module.exports = {
             res,
             message: "No Transactions on DB",
           });
+      }
     } catch (error) {
       const httpError = createError(
         error.statusCode,
         `[Error retrieving transactions] - [Transactions - GET]: ${error.message}`
+      );
+      next(httpError);
+    }
+  }),
+  deleteTransaction: catchAsync(async (req, res, next) => {
+    try {
+      const id = req.params.id;
+      const response = await Transactions.update({softDeletes:new Date()}, {
+        where: { id: `${id}` },
+      });
+      endpointResponse({
+        res,
+        message: "successfully, transaction deleted",
+        body: response,
+      });
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode,
+        `[Error retrieving transaction] - [transaction - DELETE]: ${error.message}`
       );
       next(httpError);
     }
