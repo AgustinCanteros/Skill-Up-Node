@@ -13,6 +13,6 @@ const router = express.Router();
 router.get("/", getAllTransactions);
 router.put('/:id', validateRequestSchema(putValidation), put);
 router.post('/', validateRequestSchema(postTransactionSchema), postCreateTransaction);
-router.delete('/transactions/:id', validateRequestSchema(deleteValidation), deleteTransaction);
+router.delete('/:id', validateRequestSchema(deleteValidation), deleteTransaction);
 
 module.exports = router

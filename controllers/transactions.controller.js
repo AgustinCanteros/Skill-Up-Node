@@ -65,12 +65,12 @@ module.exports = {
   deleteTransaction: catchAsync(async (req, res, next) => {
     try {
       const id = req.params.id;
-      const response = await Transactions.destroy( {
+      const response = await Transactions.update({softDeletes:new Date()}, {
         where: { id: `${id}` },
       });
       endpointResponse({
         res,
-        message: "successfully",
+        message: "successfully, transaction deleted",
         body: response,
       });
     } catch (error) {

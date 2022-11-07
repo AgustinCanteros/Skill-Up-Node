@@ -1,25 +1,22 @@
 const { Transactions } = require("../../database/models");
-const { ErrorObject } = require("../../helpers");
+const { ErrorObject } = require("../../helpers/error");
 
 module.exports = {
-  deleteValidation: {
     id: {
-      in: ["params", "query"],
+      in: ["params"],
       errorMessage: "ID is wrong",
-      isInt: true,
-      toInt: true,
+      isNumeric: {
+        errorMessage: 'Id must be numeric.',
+      },
       custom: {
-        options: async ({ req }) => {
+        options: async (id, { req }) => {
           const validation = await Transactions.findOne({
-            where: { id: `${req.params.id}` },
+            where: { id: `${id}` },
           });
           if (!validation) {
             throw new ErrorObject("id the transaction don't exist", 404);
-          } else if (validation.softDeletes !== 0) {
-            throw new ErrorObject("the transaction has already been deleted", 404);
           }
         },
       },
-    },
-  }
+    }
 };
