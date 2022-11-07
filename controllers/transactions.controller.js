@@ -8,7 +8,9 @@ module.exports = {
   postCreateTransaction: catchAsync(async (req, res, next) => {
     try {
       const response = await Transactions.create(req.body);
-
+      if (!response) {
+        throw new ErrorObject("The transaction could not be found", 404);
+      }
       endpointResponse({
         res,
         message: "Transaction created successfully.",
