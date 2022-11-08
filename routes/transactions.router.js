@@ -5,13 +5,18 @@ const {
   getFindTransaction,
   getAllTransactions,
 } = require("../controllers/transactions.controller");
-const postTransactionSchema = require("../schemas/transaction/postTransactionSchema");
-const getTransactionSchema = require("../schemas/transaction/getTrensactionSchema");
-const putValidation = require("../schemas/transaction/putTransactionShema");
 const {
   validateRequestSchema,
 } = require("../middlewares/validation/validate-schema.middleware");
+
 const router = express.Router();
+
+const postTransactionSchema = require("../schemas/transaction/postTransactionSchema");
+const getTransactionSchema = require("../schemas/transaction/getTrensactionSchema");
+
+const getValidationById = require("../schemas/transaction/getTransactionsSchemaById");
+const putValidation = require("../schemas/transaction/putTransactionShema");
+const deleteValidation = require("../schemas/transaction/deleteTransactionsSchema");
 
 router.get(
   "/:id",
@@ -25,5 +30,10 @@ router.post(
   postCreateTransaction
 );
 router.get("/", getAllTransactions);
+router.delete(
+  "/:id",
+  validateRequestSchema(deleteValidation),
+  deleteTransaction
+);
 
 module.exports = router;
