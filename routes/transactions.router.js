@@ -2,6 +2,7 @@ const express = require("express");
 const {
   put,
   postCreateTransaction,
+  deleteTransaction,
   getFindTransaction,
   getAllTransactions,
 } = require("../controllers/transactions.controller");
