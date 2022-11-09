@@ -3,7 +3,6 @@ const { get } = require('../controllers/index')
 const transactionRoutes = require('./transactions.router');
 const usersRoutes = require('./users.router')
 const categoriesRoutes = require('./categories.router');
-const authRouter = require("./auth.router")
 
 const router = express.Router()
 
