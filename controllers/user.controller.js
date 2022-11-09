@@ -89,7 +89,7 @@ module.exports = {
         }) 
       }else{
         const response = req.body;
-        await Users.update({response},
+        await Users.update(response,
         {
           where: {id}
         })
