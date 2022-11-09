@@ -1,5 +1,5 @@
 const createHttpError = require('http-errors')
-const { User } = require('../database/models')
+const { Users } = require('../database/models')
 const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/catchAsync')
 const { Security } = require('../config/security')
@@ -9,7 +9,7 @@ module.exports = {
         try {
             const { email, password } = req.body;
 
-            const user = await User.findOne({
+            const user = await Users.findOne({
                 where: { email }
             });
 

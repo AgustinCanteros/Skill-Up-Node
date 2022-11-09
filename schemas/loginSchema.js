@@ -1,9 +1,19 @@
-const { check } = require("express-validator");
 
+// const loginSchema = [
+//   check("email").notEmpty().isEmail(),
+//   check("password").notEmpty(),
+// ];
 
-const loginSchema = [
-  check("email").notEmpty().isEmail(),
-  check("password").notEmpty(),
-];
-
-module.exports = loginSchema;
+module.exports = {
+  email: {
+    in: ['body'],
+    isEmail: {
+      errorMessage: "please enter email"
+    }
+  },
+  password: {
+    in: ['body'],
+    notEmpty: true,
+    errorMessage: "enter password"
+  }
+}
