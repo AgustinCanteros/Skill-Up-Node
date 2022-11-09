@@ -88,7 +88,7 @@ module.exports = {
         )
         return next(httpError)
       }
-
+      
       endpointResponse({
         res,
         message: 'Category retrieved successfully',
