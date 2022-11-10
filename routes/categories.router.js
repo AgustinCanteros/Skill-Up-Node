@@ -1,9 +1,12 @@
 const express = require("express");
-const { postCreateCategory, getCategories, getCategoryById, updateCategory } = require("../controllers/categories.controller");
+const { postCreateCategory, 
+        getCategories, 
+        getCategoryById, 
+        updateCategory,
+        deleteCategory } = require("../controllers/categories.controller");
 
-const {
-  validateRequestSchema,
-} = require("../middlewares/validation/validate-schema.middleware");
+const { validateRequestSchema,
+       } = require("../middlewares/validation/validate-schema.middleware");
 const { createCategorySchema } = require("../schemas/categories/create.schema");
 
 const router = express.Router();
@@ -25,8 +28,7 @@ const router = express.Router();
  * 
  */
 
-router.post(
-  "/",
+router.post("/",
   validateRequestSchema(createCategorySchema),
   postCreateCategory
 );
@@ -34,6 +36,7 @@ router.post(
 router.get("/", getCategories);
 router.put("/:id", updateCategory);
 router.get("/:id", getCategoryById);
+router.delete("/:id", deleteCategory);
 
 
 module.exports = router;
