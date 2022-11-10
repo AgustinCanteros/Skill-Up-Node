@@ -43,7 +43,8 @@ app.use((err, req, res) => {
 
 app.listen(port, () => {
   // eslint-disable-next-line no-console
-  console.log(`Servidor funcionando en el puerto ${port}`);
+  console.log(`Server running on port: ${port}`);
+  console.log(`Version 1 docs are available at http://localhost:${port}/api/docs`)
 });
 
 module.exports = app;

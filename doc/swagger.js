@@ -7,7 +7,12 @@ const swaggerSpec = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "Wallet-API",
+      title: "AlkyBank API",
+      description: "Develop a digital wallet to integrate into customers' Homebanking and facilitate their transactions in a fast, fluid and secure way ",
+      termsOfService: "http://swagger.io/terms/",
+      contact: {
+        email: "waltongerman@gmail.com luisdelaespriellaj@hotmail.com cavalerohugo92@gmail.com arielcesarantoniovillafuerte@gmail.com brayanandresrl@ufps.edu.co canterosagustindev@gmail.com"
+      },
       version: "1.0.0",
     },
     components: {
