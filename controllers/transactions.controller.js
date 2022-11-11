@@ -7,6 +7,7 @@ const { encode, decode } = require("../middlewares/jwt/jwt-methods")
 module.exports = {
   postCreateTransaction: catchAsync(async (req, res, next) => {
     try {
+      req.body.date = new Date();
       const response = await Transactions.create(req.body);
 
       const token = await encode(response)
