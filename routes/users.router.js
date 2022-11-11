@@ -15,73 +15,74 @@ const {
 const getByIdSchema = require("../schemas/user/getByIdSchema");
 const router = express.Router();
 
-/** 
-  * @swagger
-  * components:
-  *     schemas:
-  *       User:
-  *         type: object
-  *         properties:
-  *           firstName:
-  *             type: string
-  *           lastName:
-  *             type: string
-  *           email:
-  *             type: string
-  *           password:
-  *             type: string
-  *           avatar:
-  *             type: string
-  *           roleId:
-  *             type: integer
-  *             default: 2
-  *         required:
-  *            - firstName
-  *            - lastName
-  *            - email
-  *            - password
-  * 
-  */
+/**
+ * @swagger
+ * components:
+ *     schemas:
+ *       User:
+ *         type: object
+ *         properties:
+ *           firstName:
+ *             type: string
+ *           lastName:
+ *             type: string
+ *           email:
+ *             type: string
+ *           password:
+ *             type: string
+ *           avatar:
+ *             type: string
+ *           roleId:
+ *             type: integer
+ *             default: 2
+ *         required:
+ *            - firstName
+ *            - lastName
+ *            - email
+ *            - password
+ *
+ */
 
 /**
  * @swagger
  * /users:
  *   get:
  *     summary: Find all users
- *     tags: [users]
- *     description: Returns all users
+ *     tags: [User]
+ *     description: Find all users.
  *     responses:
  *       '200':
- *         description: successful operation
-*          content:
- *            application/json:
- *              schema:
- *                type: array
- *                items:
- *                  $ref: '#/components/schemas/category'
+ *            description: successful operation
+ *            content:
+ *               application/json:
+ *                 schema:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/User'
  *   post:
  *     summary: Create user
- *     tags: [users]
+ *     tags: [User]
  *     description: This can only be done by the logged in user.
  *     request body:
- *          description: Get all users
- *          content:
- *             application/json:
- *               schema: $ref: #/components/schemas/users
- *             application/xml:
- *                schema:
- *                  $ref: '#/components/schemas/users'
- *             application/x-www-form-urlencoded:
- *                schema:
- *                  $ref: '#/components/schemas/users'
- *            required: true
+ *       description: Get all users
+ *       content:
+ *         application/json:
+ *            schema: 
+ *              $ref: '#/components/schemas/User'
+ *         application/xml:
+ *            schema:
+ *              $ref: '#/components/schemas/User'
+ *         application/x-www-form-urlencoded:
+ *            schema:
+ *              $ref: '#/components/schemas/User'
+ *         required: true
  *     responses:
  *       '200':
  *         description: successful operation
- *          content:
+ *         content:
  *            application/json:
- *              schema:
- *                $ref: '#/components/schemas/users'
+ *               schema:
+ *                 $ref: '#/components/schemas/User'
  *       '400':
  *         description: Bad Request
  *       '500':
@@ -95,7 +96,7 @@ router.post("/", validateRequestSchema(createUserSchema), createUsers);
  * /users/{id}:
  *   get:
  *     summary: Find user by Id
- *     tags: [users]
+ *     tags: [User]
  *     parameters:
  *        - name: id
  *          in: path
@@ -110,7 +111,7 @@ router.post("/", validateRequestSchema(createUserSchema), createUsers);
  *         content:
  *            application/json:
  *               schema:
- *                 $ref: #/components/schemas/users
+ *                 $ref: '#/components/schemas/User'
  *       '400':
  *         description: The specified user ID is invalid (not a number).
  *       '404':
@@ -121,7 +122,7 @@ router.post("/", validateRequestSchema(createUserSchema), createUsers);
  *         description: Unexpected error
  *   put:
  *     summary: Edit user by Id
- *     tags: [users]
+ *     tags: [User]
  *     parameters:
  *        - name: id
  *          in: path
@@ -131,17 +132,17 @@ router.post("/", validateRequestSchema(createUserSchema), createUsers);
  *             type: integer
  *             format: int64
  *     requestBody:
- *            description: Update a user by id 
+ *            description: Update a user by id
  *            content:
  *              application/json:
  *                schema:
- *                  $ref: '#/components/schemas/users'
+ *                  $ref: '#/components/schemas/User'
  *              application/xml:
  *                schema:
- *                  $ref: '#/components/schemas/users'
+ *                  $ref: '#/components/schemas/User'
  *              application/x-www-form-urlencoded:
  *                schema:
- *                  $ref: '#/components/schemas/users'
+ *                  $ref: '#/components/schemas/User'
  *            required: true
  *     responses:
  *       '200':
@@ -149,7 +150,7 @@ router.post("/", validateRequestSchema(createUserSchema), createUsers);
  *         content:
  *            application/json:
  *               schema:
- *                 $ref: #/components/schemas/users
+ *                 $ref: '#/components/schemas/User'
  *       '400':
  *         description: The specified user ID is invalid (not a number).
  *       '404':
@@ -160,7 +161,7 @@ router.post("/", validateRequestSchema(createUserSchema), createUsers);
  *         description: Unexpected error
  *   delete:
  *     summary: Delete user by Id
- *     tags: [users]
+ *     tags: [User]
  *     parameters:
  *        - name: id
  *          in: path
@@ -175,7 +176,7 @@ router.post("/", validateRequestSchema(createUserSchema), createUsers);
  *         content:
  *            application/json:
  *               schema:
- *                 $ref: #/components/schemas/users
+ *                 $ref: '#/components/schemas/User'
  *       '400':
  *         description: The specified user ID is invalid (not a number).
  *       '404':
@@ -188,6 +189,5 @@ router.post("/", validateRequestSchema(createUserSchema), createUsers);
 router.get("/:id", validateRequestSchema(getByIdSchema), getUserById);
 router.put("/:id", validateRequestSchema(editUserSchema), editUser);
 router.delete("/:id", validateRequestSchema(deleteUserSchema), deleteUser);
-
 
 module.exports = router;
