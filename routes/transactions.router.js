@@ -83,15 +83,19 @@ const deleteValidation = require("../schemas/transaction/deleteTransactionsSchem
  *                   items:
  *                     $ref: '#/components/schemas/Transactions'
  *                   example:
- *                     id: 1
- *                     description: income 
- *                     amount: 1000
- *                     date: 2022-11-10T21:45:49.000Z
- *                     softDeletes: null
- *                     createdAt: 2022-11-10T21:45:49.000Z
- *                     updatedAt: 2022-11-10T21:45:49.000Z
- *                     categoryId: 1
- *                     userId: 1
+ *                     status: true
+ *                     code: 200
+ *                     message: Transactions obtained successfully
+ *                     body: 
+ *                       id: 1
+ *                       description: income 
+ *                       amount: 1000
+ *                       date: 2022-11-10T21:45:49.000Z
+ *                       softDeletes: null
+ *                       createdAt: 2022-11-10T21:45:49.000Z
+ *                       updatedAt: 2022-11-10T21:45:49.000Z
+ *                       categoryId: 1
+ *                       userId: 1
  *   post:
  *     summary: Create Transactions
  *     tags: [Transactions]
@@ -135,11 +139,19 @@ const deleteValidation = require("../schemas/transaction/deleteTransactionsSchem
  *               schema:
  *                 $ref: '#/components/schemas/Transactions'
  *               example:
- *                 description: income 
- *                 amount: 1000
- *                 date: 2022-11-10
- *                 userId: 1
- *                 categoryId: 1
+ *                 status: true
+ *                 code: 200
+ *                 message: Transactions obtained successfully
+ *                 body: 
+ *                   id: 1
+ *                   description: income 
+ *                   amount: 1000
+ *                   date: 2022-11-10T21:45:49.000Z
+ *                   softDeletes: null
+ *                   createdAt: 2022-11-10T21:45:49.000Z
+ *                   updatedAt: 2022-11-10T21:45:49.000Z
+ *                   categoryId: 1
+ *                   userId: 1
  *       '400':
  *         description: Bad Request - some parameter entered does not correspond to the requirements of the endpoint.
  *       '404':
@@ -180,10 +192,19 @@ router.post(
  *               schema:
  *                 $ref: '#/components/schemas/Transactions'
  *               example:
- *                 description: income 
- *                 amount: 1000
- *                 userId: 1
- *                 categoryId: 1
+ *                 status: true
+ *                 code: 200
+ *                 message: Transactions obtained successfully
+ *                 body: 
+ *                   id: 1
+ *                   description: income 
+ *                   amount: 1000
+ *                   date: 2022-11-10T21:45:49.000Z
+ *                   softDeletes: null
+ *                   createdAt: 2022-11-10T21:45:49.000Z
+ *                   updatedAt: 2022-11-10T21:45:49.000Z
+ *                   categoryId: 1
+ *                   userId: 1
  *       '400':
  *         description: Bad Request - The specified Transactions ID is invalid (not a number).
  *       '404':
@@ -241,11 +262,10 @@ router.post(
  *               schema:
  *                 $ref: '#/components/schemas/Transactions'
  *               example:
- *                 description: income 
- *                 amount: 1000
- *                 date: 2022-11-10T21:45:49.000Z
- *                 userId: 1
- *                 categoryId: 1
+ *                 status: true
+ *                 code: 200
+ *                 message: Transactions update successfully
+ *                 body: [1]
  *       '400':
  *         description: Bad Request - The specified Transactions ID is invalid (not a number).
  *       '404':
@@ -266,7 +286,17 @@ router.post(
  *             example: 1
  *     responses:
  *       '200':
- *         description: Ok -successful operation
+ *         description: Ok- successful operation
+ *         content:
+ *            application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/Transactions'
+ *               example:
+ *                 status: true
+ *                 code: 200
+ *                 message: successfully, transaction deleted
+ *                 body: [1]
+ *                   
  *       '400':
  *         description: Bad Request - The specified Transactions ID is invalid (not a number).
  *       '404':
