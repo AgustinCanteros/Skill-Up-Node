@@ -15,7 +15,12 @@ module.exports = {
     try {
       const { firstName, lastName, email, password, roleId, avatar } = req.body;
 
-      const token = await encode(user.password, user.roleId)
+      const payload = {
+        password: user.password,
+        roleId: user.roleId
+      }
+
+      const token = await encode(payload)
 
       const response = {
         firstName: user.firstName,
