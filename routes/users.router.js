@@ -50,15 +50,32 @@ const router = express.Router();
  *     summary: Find all users
  *     tags: [User]
  *     description: Find all users.
+ *     parameters:
+ *        - name: page
+ *          in: query
+ *          description: Filter by page.
+ *          schema:
+ *             type: integer
+ *             format: int64
+ *             example: 1
  *     responses:
  *       '200':
- *            description: successful operation
+ *            description: Ok - successful operation
  *            content:
  *               application/json:
  *                 schema:
  *                   type: array
  *                   items:
  *                     $ref: '#/components/schemas/User'
+ *                   example:
+ *                     status: true
+ *                     code: 200
+ *                     message: Users obtained successfully
+ *                     body:
+ *                        firstName: Mandy
+ *                        lastName: Pyford
+ *                        email: mpyford0@xinhuanet.com
+ *                        createdAt: 2022-11-10T21:45:49.000Z       
  *   post:
  *     summary: Create user
  *     tags: [User]
@@ -69,24 +86,48 @@ const router = express.Router();
  *         application/json:
  *            schema: 
  *              $ref: '#/components/schemas/User'
+ *            example:
+ *              firstName: luis
+ *              lastName: de la espriella
+ *              email: luis@example.com
+ *              password: prueba
  *         application/xml:
  *            schema:
  *              $ref: '#/components/schemas/User'
+ *            example:
+ *              firstName: luis
+ *              lastName: de la espriella
+ *              email: luis@example.com
+ *              password: prueba
  *         application/x-www-form-urlencoded:
  *            schema:
  *              $ref: '#/components/schemas/User'
+ *            example:
+ *              firstName: luis
+ *              lastName: de la espriella
+ *              email: luis@example.com
+ *              password: prueba
  *         required: true
  *     responses:
  *       '200':
- *         description: successful operation
+ *         description: Ok - successful operation
  *         content:
  *            application/json:
  *               schema:
  *                 $ref: '#/components/schemas/User'
+ *               example:
+ *                 status: true
+ *                 code: 200
+ *                 message: Users was created
+ *                 body:
+ *                   firstName: luis
+ *                   lastName: de la espriella
+ *                   email: luis@example.com 
+ *                   token: eyJhbGciOiJIUzI1NiJ9.MQ.gaKRuIIRNvXiTlyNPE1Kp3SpAQfhrI3r9MrSB1YdMz8
  *       '400':
- *         description: Bad Request
+ *         description: Bad Request - some parameter entered does not correspond to the requirements of the endpoint.
  *       '500':
- *         description: error of server
+ *         description: Internal Server Error
  */
 router.get("/", getAllUsers);
 router.post("/", validateRequestSchema(createUserSchema), createUsers);
@@ -105,21 +146,25 @@ router.post("/", validateRequestSchema(createUserSchema), createUsers);
  *          schema:
  *             type: integer
  *             format: int64
+ *             example: 1
  *     responses:
  *       '200':
- *         description: successful operation
+ *         description: Ok - successful operation
  *         content:
  *            application/json:
  *               schema:
  *                 $ref: '#/components/schemas/User'
+ *               example:
+ *                 firstName: luis
+ *                 lastName: de la espriella
+ *                 email: luis@example.com 
+ *                 token: eyJhbGciOiJIUzI1NiJ9.MQ.gaKRuIIRNvXiTlyNPE1Kp3SpAQfhrI3r9MrSB1YdMz8
  *       '400':
- *         description: The specified user ID is invalid (not a number).
+ *         description: Bad Request - The specified user ID is invalid (not a number).
  *       '404':
- *         description: A user with the specified ID was not found.
+ *         description: Resource not found - A user with the specified ID was not found.
  *       '500':
- *         description: error of server.
- *       'default':
- *         description: Unexpected error
+ *         description: Internal Server Error
  *   put:
  *     summary: Edit user by Id
  *     tags: [User]
@@ -131,34 +176,52 @@ router.post("/", validateRequestSchema(createUserSchema), createUsers);
  *          schema:
  *             type: integer
  *             format: int64
+ *             example: 1
  *     requestBody:
- *            description: Update a user by id
- *            content:
- *              application/json:
- *                schema:
- *                  $ref: '#/components/schemas/User'
- *              application/xml:
- *                schema:
- *                  $ref: '#/components/schemas/User'
- *              application/x-www-form-urlencoded:
- *                schema:
- *                  $ref: '#/components/schemas/User'
+ *          description: Update a user by id
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/User'
+ *              example:
+ *                firstName: luis
+ *                lastName: de la espriella
+ *                email: luis@example.com
+ *                password: prueba
+ *            application/xml:
+ *              schema:
+ *                $ref: '#/components/schemas/User'
+ *              example:
+ *                firstName: luis
+ *                lastName: de la espriella
+ *                email: luis@example.com
+ *                password: prueba
+ *            application/x-www-form-urlencoded:
+ *              schema:
+ *                $ref: '#/components/schemas/User'
+ *              example:
+ *                firstName: luis
+ *                lastName: de la espriella
+ *                email: luis@example.com
+ *                password: prueba
  *            required: true
  *     responses:
  *       '200':
- *         description: successful operation
+ *         description: Ok - successful operation
  *         content:
  *            application/json:
  *               schema:
  *                 $ref: '#/components/schemas/User'
+ *               example:
+ *                 status: true
+ *                 code: 200
+ *                 message: User was edited
  *       '400':
- *         description: The specified user ID is invalid (not a number).
+ *         description: Bad Request - The specified user ID is invalid (not a number).
  *       '404':
- *         description: A user with the specified ID was not found.
+ *         description: Resource not found - A user with the specified ID was not found.
  *       '500':
- *         description: error of server.
- *       'default':
- *         description: Unexpected error
+ *         description: Internal Server Error
  *   delete:
  *     summary: Delete user by Id
  *     tags: [User]
@@ -170,21 +233,25 @@ router.post("/", validateRequestSchema(createUserSchema), createUsers);
  *          schema:
  *             type: integer
  *             format: int64
+ *             example: 1
  *     responses:
  *       '200':
- *         description: successful operation
+ *         description: Ok - successful operation
  *         content:
  *            application/json:
  *               schema:
  *                 $ref: '#/components/schemas/User'
+ *               example:
+ *                 status: true
+ *                 code: 200
+ *                 message: successfully deleted user
  *       '400':
- *         description: The specified user ID is invalid (not a number).
+ *         description: Bad Request - The specified user ID is invalid (not a number).
  *       '404':
- *         description: A user with the specified ID was not found.
+ *         description: Resource not found - A user with the specified ID was not found.
  *       '500':
- *         description: error of server.
- *       'default':
- *         description: Unexpected error
+ *         description: Internal Server Error
+ * 
  */
 router.get("/:id", validateRequestSchema(getByIdSchema), getUserById);
 router.put("/:id", validateRequestSchema(editUserSchema), editUser);
