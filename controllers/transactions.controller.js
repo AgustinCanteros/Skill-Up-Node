@@ -70,8 +70,30 @@ module.exports = {
   }),
   getAllTransactions: catchAsync(async (req, res, next) => {
     try {
-      const response = await Transactions.findAll();
+      const transactions = await Transactions.findAll();
+
+      const allTransactions = await Promise.all(transactions.map(async t => {
+        const payload = {
+          id: t.id,
+          softDeletes: t.softDeletes,
+          categoryId: t.categoryId,
+          userId: t.userId,
+          createdAt: t.createdAt,
+          updatedAt: t.updatedAt
+        }
+        const token = await encode(payload)
+
+        const response = {
+          description: t.description,
+          amount: t.amount,
+          date: t.date,
+          token
+        }
+        return response
+      }))
+      
       const idQuery = req.query.userId;
+      
       if (idQuery) {
         const responseId = await Transactions.findAll({
           where: { userId: `${idQuery}` },
