@@ -15,18 +15,16 @@ module.exports = {
     try {
       const { firstName, lastName, email, password, roleId, avatar } = req.body;
 
-      const user = await Users.create({
-        firstName,
-        lastName,
-        email,
-        password: await encryptPassword(password),
-        roleId,
-        avatar,
-      });
+      const token = await encode(user.password, user.roleId)
 
-      const token = await encode(user)
+      const response = {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        token
+      }
 
-      endpointResponse({ res, message: "Users was created", body: {user, token} });
+      endpointResponse({ res, message: "Users was created", body: response });
     } catch (error) {
       const httpError = createError(error.statusCode, error.message);
       next(httpError);
