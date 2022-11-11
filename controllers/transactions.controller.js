@@ -7,14 +7,21 @@ const { encode, decode } = require("../middlewares/jwt/jwt-methods")
 module.exports = {
   postCreateTransaction: catchAsync(async (req, res, next) => {
     try {
-      const response = await Transactions.create(req.body);
+      const transaction = await Transactions.create(req.body);
 
-      const token = await encode(response)
+      const token = await encode(transaction.id, transaction.userId)
+
+      const response = {
+        description: transaction.description,
+        amount: transaction.amount,
+        date: transaction.date,
+        token
+      }
 
       endpointResponse({
         res,
         message: "Transaction created successfully.",
-        body: {response, token},
+        body: response,
       });
     } catch (error) {
       const httpError = createHttpError(
