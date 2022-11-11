@@ -63,7 +63,7 @@ const router = express.Router();
  *     summary: Create user
  *     tags: [User]
  *     description: This can only be done by the logged in user.
- *     request body:
+ *     requestBody:
  *       description: Get all users
  *       content:
  *         application/json:
