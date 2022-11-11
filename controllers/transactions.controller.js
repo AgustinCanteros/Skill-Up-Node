@@ -98,17 +98,38 @@ module.exports = {
         const responseId = await Transactions.findAll({
           where: { userId: `${idQuery}` },
         });
+        
+        const allTransactionsResponse = await Promise.all(responseId.map(async t => {
+          const payload = {
+            id: t.id,
+            softDeletes: t.softDeletes,
+            categoryId: t.categoryId,
+            userId: t.userId,
+            createdAt: t.createdAt,
+            updatedAt: t.updatedAt
+          }
+          const token = await encode(payload)
+  
+          const response = {
+            description: t.description,
+            amount: t.amount,
+            date: t.date,
+            token
+          }
+          return response
+        }))
+
         endpointResponse({
           res,
           message: "successfully",
-          body: responseId,
+          body: allTransactionsResponse,
         });
       } else {
-        response.length
+        allTransactions.length
           ? endpointResponse({
               res,
               message: "Transactions obtained successfully",
-              body: response,
+              body: allTransactions,
             })
           : endpointResponse({
               res,
