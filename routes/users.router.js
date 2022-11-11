@@ -34,7 +34,7 @@ const router = express.Router();
  *             type: string
  *           roleId:
  *             type: integer
- *             default: 1
+ *             default: 2
  *         required:
  *            - firstName
  *            - lastName
