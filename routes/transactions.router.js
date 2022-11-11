@@ -86,16 +86,11 @@ const deleteValidation = require("../schemas/transaction/deleteTransactionsSchem
  *                     status: true
  *                     code: 200
  *                     message: Transactions obtained successfully
- *                     body: 
- *                       id: 1
+ *                     body:
  *                       description: income 
  *                       amount: 1000
  *                       date: 2022-11-10T21:45:49.000Z
- *                       softDeletes: null
- *                       createdAt: 2022-11-10T21:45:49.000Z
- *                       updatedAt: 2022-11-10T21:45:49.000Z
- *                       categoryId: 1
- *                       userId: 1
+ *                       token: eyJhbGciOiJIUzI1NiJ9.MQ.gaKRuIIRNvXiTlyNPE1Kp3SpAQfhrI3r9MrSB1YdMz8
  *   post:
  *     summary: Create Transactions
  *     tags: [Transactions]
@@ -143,15 +138,10 @@ const deleteValidation = require("../schemas/transaction/deleteTransactionsSchem
  *                 code: 200
  *                 message: Transactions obtained successfully
  *                 body: 
- *                   id: 1
  *                   description: income 
  *                   amount: 1000
  *                   date: 2022-11-10T21:45:49.000Z
- *                   softDeletes: null
- *                   createdAt: 2022-11-10T21:45:49.000Z
- *                   updatedAt: 2022-11-10T21:45:49.000Z
- *                   categoryId: 1
- *                   userId: 1
+ *                   token: eyJhbGciOiJIUzI1NiJ9.MQ.gaKRuIIRNvXiTlyNPE1Kp3SpAQfhrI3r9MrSB1YdMz8
  *       '400':
  *         description: Bad Request - some parameter entered does not correspond to the requirements of the endpoint.
  *       '404':
@@ -196,15 +186,10 @@ router.post(
  *                 code: 200
  *                 message: Transactions obtained successfully
  *                 body: 
- *                   id: 1
  *                   description: income 
  *                   amount: 1000
  *                   date: 2022-11-10T21:45:49.000Z
- *                   softDeletes: null
- *                   createdAt: 2022-11-10T21:45:49.000Z
- *                   updatedAt: 2022-11-10T21:45:49.000Z
- *                   categoryId: 1
- *                   userId: 1
+ *                   token: eyJhbGciOiJIUzI1NiJ9.MQ.gaKRuIIRNvXiTlyNPE1Kp3SpAQfhrI3r9MrSB1YdMz8
  *       '400':
  *         description: Bad Request - The specified Transactions ID is invalid (not a number).
  *       '404':
