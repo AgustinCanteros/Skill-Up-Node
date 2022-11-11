@@ -34,7 +34,16 @@ module.exports = {
   getFindTransaction: catchAsync(async (req, res, next) => {
     try {
       const { id } = req.params;
-      const response = await Transactions.findByPk(id);
+      const transaction = await Transactions.findByPk(id);
+
+      const token = await encode(transaction.id, transaction.userId)
+
+      const response = {
+        description: transaction.description,
+        amount: transaction.amount,
+        date: transaction.date,
+        token
+      }
 
       endpointResponse({
         res,
