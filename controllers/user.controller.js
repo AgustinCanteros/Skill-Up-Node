@@ -111,7 +111,7 @@ module.exports = {
     const id = req.params.id;
 
     try {
-      const user = await Users.findByPk(id, {
+      const response = await Users.findByPk(id, {
         attributes: ["firstName", "lastName", "email", "createdAt"],
       });
 
