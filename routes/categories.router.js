@@ -16,7 +16,7 @@ const router = express.Router();
  * @swagger
  * components:
  *  schemas:
- *    category:
+ *    Category:
  *      type: object
  *      requires:
  *        -name
@@ -45,12 +45,21 @@ const router = express.Router();
 *              application/json:
 *                schema:
 *                  $ref: '#/components/schemas/category'
+*                example:
+*                  description: swagger description category
+*                  name: swagger name category
 *              application/xml:
 *                schema:
 *                  $ref: '#/components/schemas/category'
+*                example:
+*                  description: swagger description category
+*                  name: swagger name category
 *              application/x-www-form-urlencoded:
 *                schema:
 *                  $ref: '#/components/schemas/category'
+*                example:
+*                  description: swagger description category
+*                  name: swagger name category
 *            required: true
 *    responses:
 *        '200':
@@ -58,10 +67,30 @@ const router = express.Router();
 *          content:
 *            application/json:
 *              schema:
-*                $ref: '#/components/schemas/category'          
+*                $ref: '#/components/schemas/category' 
+*              example:
+*                status: true
+*                code: 200
+*                message: Category created successfully
+*                body:
+*                  id: 1
+*                  description: string
+*                  name: string
+*                  updatedAt: 2022-11-10T21:45:49.000Z
+*                  createdAt: 2022-11-10T21:45:49.000Z       
 *            application/xml:
 *              schema:
 *                $ref: '#/components/schemas/category'
+*              example:
+*                status: true
+*                code: 200
+*                message: Category created successfully
+*                body:
+*                  id: 1
+*                  description: string
+*                  name: string
+*                  updatedAt: 2022-11-10T21:45:49.000Z
+*                  createdAt: 2022-11-10T21:45:49.000Z 
 *        '400':
 *          description: Invalid ID user or ID category
 *        '404':
@@ -83,14 +112,26 @@ router.post("/",
 *    summary: returns the list of all categories
 *    tags: [categories]
 *    responses:
-*      200:
-*         description: the list of categories
-*         content:
+*        '200':
+*          description: the list of categories
+*          content:
 *            application/json:
 *              schema:
 *                type: array
 *                items:
 *                  $ref: '#/components/schemas/category'
+*              example:
+*                status: true
+*                code: 200
+*                message: Category retrevied successfully
+*                body:
+*                  id: 1
+*                  description: string
+*                  name: string
+*                  updatedAt: 2022-11-10T21:45:49.000Z
+*                  createdAt: 2022-11-10T21:45:49.000Z    
+*        '400':
+*            description: Bad Request - some parameter entered does not correspond to the requirements of the endpoint.
 */
 
 router.get("/", getCategories);
@@ -116,10 +157,30 @@ router.get("/", getCategories);
 *          content:
 *            application/json:
 *              schema:
-*                $ref: '#/components/schemas/category'          
+*                $ref: '#/components/schemas/category'
+*              example:
+*                status: true
+*                code: 200
+*                message: Category retrevied successfully
+*                body:
+*                  id: 1
+*                  description: string
+*                  name: string
+*                  updatedAt: 2022-11-10T21:45:49.000Z
+*                  createdAt: 2022-11-10T21:45:49.000Z          
 *            application/xml:
 *              schema:
 *                $ref: '#/components/schemas/category'
+*              example:
+*                status: true
+*                code: 200
+*                message: Category retrevied successfully
+*                body:
+*                  id: 1
+*                  description: string
+*                  name: string
+*                  updatedAt: 2022-11-10T21:45:49.000Z
+*                  createdAt: 2022-11-10T21:45:49.000Z   
 *        '400':
 *          description: Invalid ID supplied
 *        '404':
@@ -152,12 +213,21 @@ router.get("/:id", getCategoryById);
 *              application/json:
 *                schema:
 *                  $ref: '#/components/schemas/category'
+*                example:
+*                  description: swagger description category
+*                  name: swagger name category
 *              application/xml:
 *                schema:
 *                  $ref: '#/components/schemas/category'
+*                example:
+*                  description: swagger description category
+*                  name: swagger name category
 *              application/x-www-form-urlencoded:
 *                schema:
 *                  $ref: '#/components/schemas/category'
+*                example:
+*                  description: swagger description category
+*                  name: swagger name category
 *            required: true
 *    responses:
 *        '200':
@@ -165,10 +235,30 @@ router.get("/:id", getCategoryById);
 *          content:
 *            application/json:
 *              schema:
-*                $ref: '#/components/schemas/category'          
+*                $ref: '#/components/schemas/category'
+*              example:
+*                status: true
+*                code: 200
+*                message: Category updated successfully
+*                body:
+*                  id: 1
+*                  description: string
+*                  name: string
+*                  updatedAt: 2022-11-10T21:45:49.000Z
+*                  createdAt: 2022-11-10T21:45:49.000Z        
 *            application/xml:
 *              schema:
 *                $ref: '#/components/schemas/category'
+*              example:
+*                status: true
+*                code: 200
+*                message: Category updated successfully
+*                body:
+*                  id: 1
+*                  description: string
+*                  name: string
+*                  updatedAt: 2022-11-10T21:45:49.000Z
+*                  createdAt: 2022-11-10T21:45:49.000Z
 *        '400':
 *          description: Invalid ID supplied
 *        '404':
@@ -201,10 +291,30 @@ router.put("/:id", updateCategory);
 *          content:
 *            application/json:
 *              schema:
-*                $ref: '#/components/schemas/category'          
+*                $ref: '#/components/schemas/category'  
+*              example:
+*                status: true
+*                code: 200
+*                message: Category deleted successfully
+*                body:
+*                  id: 1
+*                  description: string
+*                  name: string
+*                  updatedAt: 2022-11-10T21:45:49.000Z
+*                  createdAt: 2022-11-10T21:45:49.000Z        
 *            application/xml:
 *              schema:
 *                $ref: '#/components/schemas/category'
+*              example:
+*                status: true
+*                code: 200
+*                message: Category deleted successfully
+*                body:
+*                  id: 1
+*                  description: string
+*                  name: string
+*                  updatedAt: 2022-11-10T21:45:49.000Z
+*                  createdAt: 2022-11-10T21:45:49.000Z
 *        '400':
 *          description: Invalid ID supplied
 *        '404':
