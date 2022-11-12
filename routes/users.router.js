@@ -79,7 +79,7 @@ const router = express.Router();
  *   post:
  *     summary: Create user
  *     tags: [User]
- *     description: This can only be done by the logged in user.
+ *     description: Register an user.
  *     requestBody:
  *       description: Get all users
  *       content:
@@ -172,7 +172,7 @@ router.post("/", validateRequestSchema(createUserSchema), createUsers);
  *        - name: id
  *          in: path
  *          required: true
- *          description: ID of user to return.
+ *          description: ID of user to edit.
  *          schema:
  *             type: integer
  *             format: int64
@@ -229,7 +229,7 @@ router.post("/", validateRequestSchema(createUserSchema), createUsers);
  *        - name: id
  *          in: path
  *          required: true
- *          description: ID of user to return.
+ *          description: ID of user to delete.
  *          schema:
  *             type: integer
  *             format: int64
