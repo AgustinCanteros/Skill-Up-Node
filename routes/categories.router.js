@@ -37,26 +37,26 @@ const router = express.Router();
 * /categories:
 *  post:
 *    summary: create a new category
-*    tags: [categories] 
+*    tags: [Categories] 
 *    description: Add a new category
 *    requestBody:
 *            description: Create a new category 
 *            content:
 *              application/json:
 *                schema:
-*                  $ref: '#/components/schemas/category'
+*                  $ref: '#/components/schemas/Category'
 *                example:
 *                  description: swagger description category
 *                  name: swagger name category
 *              application/xml:
 *                schema:
-*                  $ref: '#/components/schemas/category'
+*                  $ref: '#/components/schemas/Category'
 *                example:
 *                  description: swagger description category
 *                  name: swagger name category
 *              application/x-www-form-urlencoded:
 *                schema:
-*                  $ref: '#/components/schemas/category'
+*                  $ref: '#/components/schemas/Category'
 *                example:
 *                  description: swagger description category
 *                  name: swagger name category
@@ -67,7 +67,7 @@ const router = express.Router();
 *          content:
 *            application/json:
 *              schema:
-*                $ref: '#/components/schemas/category' 
+*                $ref: '#/components/schemas/Category' 
 *              example:
 *                status: true
 *                code: 200
@@ -80,7 +80,7 @@ const router = express.Router();
 *                  createdAt: 2022-11-10T21:45:49.000Z       
 *            application/xml:
 *              schema:
-*                $ref: '#/components/schemas/category'
+*                $ref: '#/components/schemas/Category'
 *              example:
 *                status: true
 *                code: 200
@@ -110,7 +110,7 @@ router.post("/",
 * /categories:
 *  get:
 *    summary: returns the list of all categories
-*    tags: [categories]
+*    tags: [Categories]
 *    responses:
 *        '200':
 *          description: the list of categories
@@ -119,7 +119,7 @@ router.post("/",
 *              schema:
 *                type: array
 *                items:
-*                  $ref: '#/components/schemas/category'
+*                  $ref: '#/components/schemas/Category'
 *              example:
 *                status: true
 *                code: 200
@@ -142,11 +142,12 @@ router.get("/", getCategories);
 * /categories/{id}:
 *  get:
 *    summary: Find category by ID
-*    tags: [categories]
+*    tags: [Categories]
 *    parameters:
 *       - name: id
 *         in: path
 *         description: ID of category to return
+*         example: 1
 *         required: true
 *         schema:
 *           type: integer
@@ -157,7 +158,7 @@ router.get("/", getCategories);
 *          content:
 *            application/json:
 *              schema:
-*                $ref: '#/components/schemas/category'
+*                $ref: '#/components/schemas/Category'
 *              example:
 *                status: true
 *                code: 200
@@ -170,7 +171,7 @@ router.get("/", getCategories);
 *                  createdAt: 2022-11-10T21:45:49.000Z          
 *            application/xml:
 *              schema:
-*                $ref: '#/components/schemas/category'
+*                $ref: '#/components/schemas/Category'
 *              example:
 *                status: true
 *                code: 200
@@ -197,12 +198,13 @@ router.get("/:id", getCategoryById);
 * /categories/{id}:
 *  put:
 *    summary:  Update an existing category
-*    tags: [categories] 
+*    tags: [Categories] 
 *    description: Update an existing category by Id
 *    parameters:
 *       - name: id
 *         in: path
 *         description: ID of category to return
+*         example: 1
 *         required: true
 *         schema:
 *           type: integer
@@ -212,19 +214,19 @@ router.get("/:id", getCategoryById);
 *            content:
 *              application/json:
 *                schema:
-*                  $ref: '#/components/schemas/category'
+*                  $ref: '#/components/schemas/Category'
 *                example:
 *                  description: swagger description category
 *                  name: swagger name category
 *              application/xml:
 *                schema:
-*                  $ref: '#/components/schemas/category'
+*                  $ref: '#/components/schemas/Category'
 *                example:
 *                  description: swagger description category
 *                  name: swagger name category
 *              application/x-www-form-urlencoded:
 *                schema:
-*                  $ref: '#/components/schemas/category'
+*                  $ref: '#/components/schemas/Category'
 *                example:
 *                  description: swagger description category
 *                  name: swagger name category
@@ -235,7 +237,7 @@ router.get("/:id", getCategoryById);
 *          content:
 *            application/json:
 *              schema:
-*                $ref: '#/components/schemas/category'
+*                $ref: '#/components/schemas/Category'
 *              example:
 *                status: true
 *                code: 200
@@ -248,7 +250,7 @@ router.get("/:id", getCategoryById);
 *                  createdAt: 2022-11-10T21:45:49.000Z        
 *            application/xml:
 *              schema:
-*                $ref: '#/components/schemas/category'
+*                $ref: '#/components/schemas/Category'
 *              example:
 *                status: true
 *                code: 200
@@ -275,12 +277,13 @@ router.put("/:id", updateCategory);
 * /categories/{id}:
 *  delete:
 *    summary:  Delete a category
-*    tags: [categories] 
+*    tags: [Categories] 
 *    description: Delete a category
 *    parameters:
 *       - name: id
 *         in: path
 *         description: ID of category to delete
+*         example: 1
 *         required: true
 *         schema:
 *           type: integer
@@ -291,7 +294,7 @@ router.put("/:id", updateCategory);
 *          content:
 *            application/json:
 *              schema:
-*                $ref: '#/components/schemas/category'  
+*                $ref: '#/components/schemas/Category'  
 *              example:
 *                status: true
 *                code: 200
@@ -304,7 +307,7 @@ router.put("/:id", updateCategory);
 *                  createdAt: 2022-11-10T21:45:49.000Z        
 *            application/xml:
 *              schema:
-*                $ref: '#/components/schemas/category'
+*                $ref: '#/components/schemas/Category'
 *              example:
 *                status: true
 *                code: 200
