@@ -20,6 +20,7 @@ module.exports = {
   firstNameNull: {
     custom: {
       options: async (value, { req }) => {
+        console.log(req)
         if (!req.body.firstName) {
           throw new ErrorObject("firstName is null");
         }
