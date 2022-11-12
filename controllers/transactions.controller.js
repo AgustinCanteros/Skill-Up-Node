@@ -27,13 +27,13 @@ module.exports = {
     try {
 
       req.body.date = new Date();
-      const transaction = await Transactions.create(req.body);
+      const {id, userId, description, amount, date} = await Transactions.create(req.body);
       
-      const payload = transactionPayload(transaction.id, transaction.userId)
+      const payload = transactionPayload(id, userId)
 
       const token = await encode(payload)
 
-      const response = transactionResponse(transaction.description, transaction.amount, transaction.date, token)
+      const response = transactionResponse(description, amount, date, token)
 
       endpointResponse({
         res,
@@ -51,13 +51,13 @@ module.exports = {
   getFindTransaction: catchAsync(async (req, res, next) => {
     try {
       const { id } = req.params;
-      const transaction = await Transactions.findByPk(id);
+      const {userId, description, amount, date} = await Transactions.findByPk(id);
       
-      const payload = transactionPayload(transaction.id, transaction.userId)
+      const payload = transactionPayload(id, userId)
 
       const token = await encode(payload)
 
-      const response = transactionResponse(transaction.description, transaction.amount, transaction.date, token)
+      const response = transactionResponse(description, amount, date, token)
 
       endpointResponse({
         res,
