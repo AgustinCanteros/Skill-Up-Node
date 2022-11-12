@@ -10,8 +10,13 @@ module.exports = {
 
       req.body.date = new Date();
       const transaction = await Transactions.create(req.body);
+      
+      const payload = {
+        id: transaction.id,
+        userId: transaction.userId
+      }
 
-      const token = await encode(transaction.id, transaction.userId)
+      const token = await encode(payload)
 
       const response = {
         description: transaction.description,
