@@ -14,6 +14,15 @@ module.exports = {
   createUsers: catchAsync(async (req, res, next) => {
     try {
       const { firstName, lastName, email, password, roleId, avatar } = req.body;
+      
+      const user = await Users.create({
+        firstName,
+        lastName,
+        email,
+        password: await encryptPassword(password),
+        roleId,
+        avatar,
+      });
 
       const payload = {
         password: user.password,
