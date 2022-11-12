@@ -63,8 +63,8 @@ module.exports = {
               Previous:(page===0)
                 ?false
                 :`http://localhost:3000/api/users?page=${datos.previous}`,
-              next:`http://localhost:3000/api/users?page=${datos.next}`,
-              response
+              next:(response.length === 0)?false:`http://localhost:3000/api/users?page=${datos.next}`,
+              response:(response.length === 0)?`No more user on DB`:response
             },
             
           })
