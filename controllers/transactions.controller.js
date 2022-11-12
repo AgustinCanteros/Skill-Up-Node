@@ -32,12 +32,9 @@ module.exports = {
     try {
       const { id } = req.params;
       const {userId, description, amount, date} = await Transactions.findByPk(id);
-
-      //aca
+      
       const payload = transactionPayload(id, userId)
       const token = await encode(payload)
-
-      //aca
       const response = transactionResponse(description, amount, date, token)
 
       endpointResponse({
@@ -77,31 +74,27 @@ module.exports = {
       const transactions = await Transactions.findAll();
 
       const allTransactions = await Promise.all(transactions.map(async t => {
-        //aca
+      
         const payload = transactionPayload(t.id, t.userId)
         const token = await encode(payload)
-        //aca
         const response = transactionResponse(t.description, t.amount, t.date, token)
-
+        
         return response
       }))
-
+      
       const idQuery = req.query.userId;
       
       if (idQuery) {
         const responseId = await Transactions.findAll({
           where: { userId: idQuery },
         });
-
+        
         const allTransactionsResponse = await Promise.all(responseId.map(async t => {
-          //aca
+        
           const payload = transactionPayload(t.id, t.userId)
-
           const token = await encode(payload)
-          
-          //aca
           const response = transactionResponse(t.description, t.amount, t.date, token)
-
+          
           return response
         }))
 

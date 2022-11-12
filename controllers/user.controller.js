@@ -11,12 +11,32 @@ async function encryptPassword(password) {
   return await bcrypt.hash(password, salt);
 }
 
+const userPayload = (password, id, roleId, email) => {
+  const payload = {
+    password,
+    id,
+    roleId,
+    email
+  }
+  return payload
+}
+
+const userResponse = (firstName, lastName, email, token) => {
+  const response = {
+    firstName,
+    lastName,
+    email,
+    token
+  }
+  return response
+}
+
 module.exports = {
   createUsers: catchAsync(async (req, res, next) => {
     
     try {
       const { firstName, lastName, email, password, roleId, avatar } = req.body;
-
+      
       const user = await Users.create({
         firstName,
         lastName,
@@ -26,7 +46,6 @@ module.exports = {
         avatar,
       });
 
-      //aca
       const payload = userPayload(password, user.id, roleId, email)
       const token = await encode(payload)
       const response = userResponse(firstName, lastName, email, token)
