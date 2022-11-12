@@ -91,6 +91,8 @@ const deleteValidation = require("../schemas/transaction/deleteTransactionsSchem
  *                       amount: 1000
  *                       date: 2022-11-10T21:45:49.000Z
  *                       token: eyJhbGciOiJIUzI1NiJ9.MQ.gaKRuIIRNvXiTlyNPE1Kp3SpAQfhrI3r9MrSB1YdMz8
+ *       '400':
+ *            description: Bad Request - some parameter entered does not correspond to the requirements of the endpoint.
  *   post:
  *     summary: Create Transactions
  *     tags: [Transactions]
@@ -203,7 +205,7 @@ router.post(
  *        - name: id
  *          in: path
  *          required: true
- *          description: ID of Transactions to return.
+ *          description: ID of Transactions to edit.
  *          schema:
  *             type: integer
  *             format: int64
@@ -264,7 +266,7 @@ router.post(
  *        - name: id
  *          in: path
  *          required: true
- *          description: ID of Transactions to return.
+ *          description: ID of Transactions to delete.
  *          schema:
  *             type: integer
  *             format: int64
