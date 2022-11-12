@@ -2,7 +2,25 @@ const createHttpError = require("http-errors");
 const { Transactions } = require("../database/models");
 const { endpointResponse } = require("../helpers/success");
 const { catchAsync } = require("../helpers/catchAsync");
-const { encode, decode } = require("../middlewares/jwt/jwt-methods") 
+const { encode, decode } = require("../middlewares/jwt/jwt-methods")
+
+const transactionPayload = (id, userId) => {
+  const payload = {
+    id,
+    userId
+  }
+  return payload
+}
+
+const transactionResponse = (description, amount, date, token) => {
+  const response = {
+    description,
+    amount,
+    date,
+    token
+  }
+  return response
+}
 
 module.exports = {
   postCreateTransaction: catchAsync(async (req, res, next) => {
@@ -11,19 +29,11 @@ module.exports = {
       req.body.date = new Date();
       const transaction = await Transactions.create(req.body);
       
-      const payload = {
-        id: transaction.id,
-        userId: transaction.userId
-      }
+      const payload = transactionPayload(transaction.id, transaction.userId)
 
       const token = await encode(payload)
 
-      const response = {
-        description: transaction.description,
-        amount: transaction.amount,
-        date: transaction.date,
-        token
-      }
+      const response = transactionResponse(transaction.description, transaction.amount, transaction.date, token)
 
       endpointResponse({
         res,
@@ -42,15 +52,12 @@ module.exports = {
     try {
       const { id } = req.params;
       const transaction = await Transactions.findByPk(id);
+      
+      const payload = transactionPayload(transaction.id, transaction.userId)
 
-      const token = await encode(transaction.id, transaction.userId)
+      const token = await encode(payload)
 
-      const response = {
-        description: transaction.description,
-        amount: transaction.amount,
-        date: transaction.date,
-        token
-      }
+      const response = transactionResponse(transaction.description, transaction.amount, transaction.date, token)
 
       endpointResponse({
         res,
@@ -89,22 +96,12 @@ module.exports = {
       const transactions = await Transactions.findAll();
 
       const allTransactions = await Promise.all(transactions.map(async t => {
-        const payload = {
-          id: t.id,
-          softDeletes: t.softDeletes,
-          categoryId: t.categoryId,
-          userId: t.userId,
-          createdAt: t.createdAt,
-          updatedAt: t.updatedAt
-        }
+      
+        const payload = transactionPayload(t.id, t.userId)
         const token = await encode(payload)
 
-        const response = {
-          description: t.description,
-          amount: t.amount,
-          date: t.date,
-          token
-        }
+        const response = transactionResponse(t.description, t.amount, t.date, token)
+        
         return response
       }))
       
@@ -116,22 +113,12 @@ module.exports = {
         });
         
         const allTransactionsResponse = await Promise.all(responseId.map(async t => {
-          const payload = {
-            id: t.id,
-            softDeletes: t.softDeletes,
-            categoryId: t.categoryId,
-            userId: t.userId,
-            createdAt: t.createdAt,
-            updatedAt: t.updatedAt
-          }
+        
+          const payload = transactionPayload(t.id, t.userId)
           const token = await encode(payload)
   
-          const response = {
-            description: t.description,
-            amount: t.amount,
-            date: t.date,
-            token
-          }
+          const response = transactionResponse(t.description, t.amount, t.date, token)
+          
           return response
         }))
 
