@@ -7,33 +7,12 @@ module.exports = {
       isNumeric: {
         errorMessage: 'id must be numeric.',
       },
-      custom: {
-        options: async (id,{ req }) => {
-          const validation = await Transactions.findOne({
-            where: { id: `${id}` },
-          });
-          if (!validation) {
-            throw new ErrorObject("id the transaction don't exist", 404);
-          }
-        },
-      },
     },
     userId: {
       in: ["body"],
       errorMessage: "User in the transaction don't exist",
       isNumeric: {
         errorMessage: 'userId must be numeric.',
-      },
-      custom: {
-        options: async (userId, { req }) => {
-          try {
-            const user = await Users.findByPk(userId);
-            if (!user) throw new ErrorObject('User not found.', 404);
-            req.body.user = `${user.firstName} ${user.lastName}`;
-          } catch (error) {
-            throw error;
-          }
-        },
       },
     },
     categoryId: {

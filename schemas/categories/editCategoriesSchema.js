@@ -1,14 +1,12 @@
 module.exports = {
     editCategorySchema: {
       name: {
-        optional: false,
-        notEmpty: true,
+        optional: true,
         errorMessage: "name is required",
       },
       description: {
-        notEmpty: {
-          errorMessage: "description is null"
-        },
+        optional: true,
+        errorMessage: "description is required",
       },
       id: {
         in: ["params"],
