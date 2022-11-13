@@ -1,6 +1,5 @@
 var chai = require("chai");
 let chaiHttp = require("chai-http");
-const { body } = require("express-validator");
 var expect = require("chai").expect;
 
 let app = require("../app");
@@ -23,8 +22,8 @@ describe("Test endpoints categories", () => {
       );
       expect(response).to.have.property("body");
     });
-    it("It should not get any information if there is no id", async () => {
-      const id = 1; // nonexistent id
+    it("get category by id", async () => {
+      const id = 1;
       const response = await chai.request(app).get(`/api/categories/${id}`);
       expect(response.statusCode).to.equal(200);
       expect(response.body.message).to.equal("Category retrieved successfully");
@@ -36,7 +35,7 @@ describe("Test endpoints categories", () => {
   });
 
   describe("POST /categories", () => {
-    it("should create transaction without name and description fields", async () => {
+    it("should create transaction", async () => {
       const response = await chai
         .request(app)
         .post(`/api/categories`)
@@ -52,20 +51,20 @@ describe("Test endpoints categories", () => {
 
   describe("DELETE /categories", () => {
     it("you must delete category with id", async () => {
-      const id = 19; // nonexistent id
+      const id = 3;
       const response = await chai.request(app).delete(`/api/categories/${id}`);
       expect(response.statusCode).to.equal(200);
       expect(response.body.message).to.equal("Categories deleted successfully");
     });
-    it("you must delete category with id", async () => {
+    it("should respond error for not finding Id to delete", async () => {
       const response = await chai.request(app).delete(`/api/categories/0`);
       expect(response.statusCode).to.equal(401);
     });
   });
 
   describe("PUT /categories", () => {
-    it("must edit transaction with id and must not contain name and description fields", async () => {
-      const id = 4; // nonexistent id
+    it("must edit transaction with id if contain name and description fields", async () => {
+      const id = 4;
       const response = await chai
         .request(app)
         .put(`/api/categories/${id}`)
@@ -73,8 +72,8 @@ describe("Test endpoints categories", () => {
       expect(response.statusCode).to.equal(200);
       expect(response.body.message).to.equal("Categories update successfully");
     });
-    it("must edit transaction with id and must not contain name and description fields", async () => {
-      const id = 4; // nonexistent id
+    it("must respond error due to missing fields", async () => {
+      const id = 4;
       const response = await chai
         .request(app)
         .put(`/api/categories/${id}`)
