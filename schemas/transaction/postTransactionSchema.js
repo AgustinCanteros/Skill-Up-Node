@@ -1,7 +1,7 @@
 module.exports = {
   amount: {
     errorMessage: 'Please enter amount.',
-    isNumeric: {
+    isFloat: {
       errorMessage: 'Amount must be numeric.',
     },
     notEmpty: {
@@ -20,6 +20,17 @@ module.exports = {
   date: {
     notEmpty: {
       errorMessage: "date is empty"
+    },
+    isDate: {
+      errorMessage: "date must be a date (AAAA/MM/DD)"
+    }
+  },
+  categoryId: {
+    notEmpty: {
+      errorMessage: "categoryId is null"
+    },
+    isNumeric: {
+      errorMessage: "categoryId must be numeric"
     }
   }
 };

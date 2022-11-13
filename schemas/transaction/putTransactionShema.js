@@ -1,6 +1,3 @@
-const { Transactions , Users } = require("../../database/models");
-const { ErrorObject } = require("../../helpers/error");
-
 module.exports = {
     id: {
       in: ["params"],
@@ -25,7 +22,7 @@ module.exports = {
     amount: {
       in: ["body"],
       errorMessage: "amount in the transaction don't exist",
-      isNumeric: {
+      isFloat: {
         errorMessage: 'amount must be numeric.',
       },
     },
@@ -33,7 +30,7 @@ module.exports = {
       in: ["body"],
       errorMessage: "Date in the transaction don't exist",
       isDate: {
-        errorMessage: 'Date must be a valid date.',
+        errorMessage: 'Date must be a valid date. (AAAA/MM/DD)',
       },
     }
 };
