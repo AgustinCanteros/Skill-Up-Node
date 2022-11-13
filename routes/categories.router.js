@@ -1,12 +1,17 @@
 const express = require("express");
-const { postCreateCategory, 
-        getCategories, 
-        getCategoryById, 
-        updateCategory,
-        deleteCategory } = require("../controllers/categories.controller");
+const {
+  postCreateCategory,
+  getCategories,
+  getCategoryById,
+  updateCategory,
+  deleteCategory,
+} = require("../controllers/categories.controller");
+const userAuthMiddleware = require("../middlewares/auth/userAuth.middleware");
+const usersTokenAuthMiddleware = require("../middlewares/auth/usersTokenAuth.middleware");
 
-const { validateRequestSchema,
-       } = require("../middlewares/validation/validate-schema.middleware");
+const {
+  validateRequestSchema,
+} = require("../middlewares/validation/validate-schema.middleware");
 const { createCategorySchema } = require("../schemas/categories/create.schema");
 const { editCategorySchema } = require("../schemas/categories/editCategoriesSchema")
 const { findByIdSchema } = require("../schemas/categories/getByIdSchema")
@@ -30,8 +35,8 @@ const router = express.Router();
  *          description: This is the description of the category
  *        name:
  *          type: string
- *          description: This is the name of the category      
- * 
+ *          description: This is the name of the category
+ *
  */
 
 /**
@@ -102,7 +107,10 @@ const router = express.Router();
 *          description: error of server
 */
 
-router.post("/",
+router.post(
+  "/",
+  usersTokenAuthMiddleware,
+  userAuthMiddleware,
   validateRequestSchema(createCategorySchema),
   postCreateCategory
 );
@@ -137,7 +145,7 @@ router.post("/",
 *            description: Bad Request - some parameter entered does not correspond to the requirements of the endpoint.
 */
 
-router.get("/", getCategories);
+router.get("/", usersTokenAuthMiddleware, getCategories);
 
 /**
  /
@@ -193,9 +201,9 @@ router.get("/", getCategories);
 *          description: error of server
 */
 
-router.get("/:id", validateRequestSchema(findByIdSchema), getCategoryById);
+router.get("/:id", usersTokenAuthMiddleware, validateRequestSchema(findByIdSchema), getCategoryById);
 
- /**
+/**
  /
 * @swagger
 * /categories/{id}:
@@ -272,7 +280,7 @@ router.get("/:id", validateRequestSchema(findByIdSchema), getCategoryById);
 *          description: error of server
 */
 
-router.put("/:id", validateRequestSchema(editCategorySchema), updateCategory);
+router.put("/:id", usersTokenAuthMiddleware, userAuthMiddleware, validateRequestSchema(editCategorySchema), updateCategory);
 
 /**
  /
@@ -329,7 +337,6 @@ router.put("/:id", validateRequestSchema(editCategorySchema), updateCategory);
 *          description: error of server
 */
 
-router.delete("/:id", validateRequestSchema(deleteCategorySchema), deleteCategory);
-
+router.delete("/:id", usersTokenAuthMiddleware, userAuthMiddleware, validateRequestSchema(deleteCategorySchema), deleteCategory);
 
 module.exports = router;

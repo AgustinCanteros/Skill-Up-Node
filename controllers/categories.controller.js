@@ -2,6 +2,7 @@ const createHttpError = require("http-errors")
 const { endpointResponse } = require("../helpers/success")
 const { catchAsync } = require("../helpers/catchAsync")
 const { Categories, Transactions } = require("../database/models/")
+const { ErrorObject } = require("../helpers/error");
 
 module.exports = {
   postCreateCategory: catchAsync(async (req, res, next) => {
@@ -42,23 +43,10 @@ module.exports = {
     const { id } = req.params
     const { name, description } = req.body
 
-    if (!name || !description) {
-      const httpError = createHttpError(
-        400,
-        `[Error updating category] - [index - POST]: All fields are required`
-      )
-      return next(httpError)
-    }
-
     const foundCategory = await Categories.findByPk(id)
 
-    if (!foundCategory) {
-      const httpError = createHttpError(
-        401,
-        `[Error updating category] - [index - PUT]: Couldn't find a category`
-      )
-      return next(httpError)
-    }
+    if(!foundCategory) throw new ErrorObject('Category not found', 404)
+
     try {
       const response = await foundCategory.update({ name, description })
 
@@ -80,6 +68,9 @@ module.exports = {
     const { id } = req.params;
     try {
       const response = await Categories.findByPk(id)
+
+      if (!response) throw new ErrorObject("the id does not exist in the database", 404);
+
       endpointResponse({
         res,
         message: 'Category retrieved successfully',
@@ -99,6 +90,8 @@ module.exports = {
     const { id } = req.params
 
     const foundCategory = await Categories.findByPk(id)
+
+    if (!foundCategory) throw new ErrorObject("the category id does not exist in the database", 404);
 
     try {
       await Transactions.update({

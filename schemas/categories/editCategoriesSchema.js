@@ -1,6 +1,3 @@
-const { Categories } = require("../../database/models");
-const {ErrorObject} = require('../../helpers/error')
-
 module.exports = {
     editCategorySchema: {
       name: {
@@ -14,14 +11,11 @@ module.exports = {
         },
       },
       id: {
-        custom: {
-          options: async (value, {req}) => {
-            const {id} = req.params
-            const exist = await Categories.findByPk(id)
-            if(!exist) throw new ErrorObject('Category not found', 404)
-          }
-        }
-      },
+        in: ["params"],
+        isNumeric: {
+          errorMessage: 'Id must be numeric.',
+        },
+      }
     },
   };
   
