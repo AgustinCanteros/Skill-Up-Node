@@ -8,6 +8,9 @@ const { postCreateCategory,
 const { validateRequestSchema,
        } = require("../middlewares/validation/validate-schema.middleware");
 const { createCategorySchema } = require("../schemas/categories/create.schema");
+const { editCategorySchema } = require("../schemas/categories/editCategoriesSchema")
+const { findByIdSchema } = require("../schemas/categories/getByIdSchema")
+const { deleteCategorySchema } = require("../schemas/categories/deleteCategoriesSchema")
 
 const router = express.Router();
 
@@ -190,7 +193,7 @@ router.get("/", getCategories);
 *          description: error of server
 */
 
-router.get("/:id", getCategoryById);
+router.get("/:id", validateRequestSchema(findByIdSchema), getCategoryById);
 
  /**
  /
@@ -269,7 +272,7 @@ router.get("/:id", getCategoryById);
 *          description: error of server
 */
 
-router.put("/:id", updateCategory);
+router.put("/:id", validateRequestSchema(editCategorySchema), updateCategory);
 
 /**
  /
@@ -326,7 +329,7 @@ router.put("/:id", updateCategory);
 *          description: error of server
 */
 
-router.delete("/:id", deleteCategory);
+router.delete("/:id", validateRequestSchema(deleteCategorySchema), deleteCategory);
 
 
 module.exports = router;

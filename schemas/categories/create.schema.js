@@ -5,5 +5,10 @@ module.exports = {
       notEmpty: true,
       errorMessage: "name is required",
     },
+    description: {
+      notEmpty: {
+        errorMessage: "description is null"
+      },
+    }
   },
 };
