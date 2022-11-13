@@ -14,6 +14,9 @@ const {
 } = require("../middlewares/validation/validate-schema.middleware");
 const getByIdSchema = require("../schemas/user/getByIdSchema");
 const avatarUpload = require("../middlewares/multer/avatarUpload");
+const userAuthMiddleware = require("../middlewares/auth/userAuth.middleware");
+const usersTokenAuthMiddleware = require("../middlewares/auth/usersTokenAuth.middleware");
+
 const router = express.Router();
 
 /**
@@ -76,7 +79,7 @@ const router = express.Router();
  *                        firstName: Mandy
  *                        lastName: Pyford
  *                        email: mpyford0@xinhuanet.com
- *                        createdAt: 2022-11-10T21:45:49.000Z       
+ *                        createdAt: 2022-11-10T21:45:49.000Z
  *   post:
  *     summary: Create user
  *     tags: [User]
@@ -85,7 +88,7 @@ const router = express.Router();
  *       description: Get all users
  *       content:
  *         application/json:
- *            schema: 
+ *            schema:
  *              $ref: '#/components/schemas/User'
  *            example:
  *              firstName: luis
@@ -123,15 +126,20 @@ const router = express.Router();
  *                 body:
  *                   firstName: luis
  *                   lastName: de la espriella
- *                   email: luis@example.com 
+ *                   email: luis@example.com
  *                   token: eyJhbGciOiJIUzI1NiJ9.MQ.gaKRuIIRNvXiTlyNPE1Kp3SpAQfhrI3r9MrSB1YdMz8
  *       '400':
  *         description: Bad Request - some parameter entered does not correspond to the requirements of the endpoint.
  *       '500':
  *         description: Internal Server Error
  */
-router.get("/", getAllUsers);
-router.post("/", avatarUpload, validateRequestSchema(createUserSchema), createUsers);
+router.get("/", usersTokenAuthMiddleware, userAuthMiddleware, getAllUsers);
+router.post(
+  "/",
+  avatarUpload,
+  validateRequestSchema(createUserSchema),
+  createUsers
+);
 
 /**
  * @swagger
@@ -158,7 +166,7 @@ router.post("/", avatarUpload, validateRequestSchema(createUserSchema), createUs
  *               example:
  *                 firstName: luis
  *                 lastName: de la espriella
- *                 email: luis@example.com 
+ *                 email: luis@example.com
  *                 token: eyJhbGciOiJIUzI1NiJ9.MQ.gaKRuIIRNvXiTlyNPE1Kp3SpAQfhrI3r9MrSB1YdMz8
  *       '400':
  *         description: Bad Request - The specified user ID is invalid (not a number).
@@ -252,10 +260,29 @@ router.post("/", avatarUpload, validateRequestSchema(createUserSchema), createUs
  *         description: Resource not found - A user with the specified ID was not found.
  *       '500':
  *         description: Internal Server Error
- * 
+ *
  */
-router.get("/:id", validateRequestSchema(getByIdSchema), getUserById);
-router.put("/:id", avatarUpload, validateRequestSchema(editUserSchema), editUser);
-router.delete("/:id", validateRequestSchema(deleteUserSchema), deleteUser);
+router.get(
+  "/:id",
+  validateRequestSchema(getByIdSchema),
+  usersTokenAuthMiddleware,
+  userAuthMiddleware,
+  getUserById
+);
+router.put(
+  "/:id",
+  avatarUpload,
+  validateRequestSchema(editUserSchema),
+  usersTokenAuthMiddleware,
+  userAuthMiddleware,
+  editUser
+);
+router.delete(
+  "/:id",
+  validateRequestSchema(deleteUserSchema),
+  usersTokenAuthMiddleware,
+  userAuthMiddleware,
+  deleteUser
+);
 
 module.exports = router;
