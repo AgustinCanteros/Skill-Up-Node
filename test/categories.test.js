@@ -15,7 +15,7 @@ suite("Tests for Categories Routes", function () {
     name: "updateCategory",
     description: "updateCategory",
   };
-  let categoryID = 10;
+  let categoryID = 11;
   let token;
 
   before((done) => {
