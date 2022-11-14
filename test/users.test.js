@@ -1,79 +1,158 @@
-var chai = require("chai");
-let chaiHttp = require("chai-http");
-var expect = require("chai").expect;
+const chaiHTTP = require("chai-http");
+const chai = require("chai");
+const { assert } = require("chai");
+const app = require("../app");
+const { suite, test } = require("mocha");
 
-let app = require("../app");
+chai.use(chaiHTTP);
 
-chai.use(chaiHttp);
+suite("Tests for Users Routes", function () {
+  const createUser = {
+    firstName: "cesar",
+    lastName: "villafuerte",
+    email: "jose@test.com",
+    password: "1234",
+    roleId: 1,
+  };
+  const updateUsers = {
+    email: "updated@email.com",
+    firstName: "updatedName",
+    lastName: "updatedLastname",
+    password: "updatePassword",
+  };
 
-const users = {
-  firstName: "cesar",
-  lastName: "villafuerte",
-  email: "tonor@gmail.com",
-  password: "1234",
-  avatar: "pepe",
-  roleId: 2,
-};
+  let UserID = 36;
+  let token;
 
-// parent block
-describe("Test endpoints user", () => {
-  describe("GET /users", () => {
-    it("It should give all users information", async () => {
-      const response = await chai.request(app).get("/api/users");
-      expect(response.statusCode).to.equal(200);
-      expect(response.body.message).to.equal("Users obtained successfully");
-      expect(response).to.have.property("body");
-    });
-    it("get user by id", async () => {
-      const id = 1;
-      const response = await chai.request(app).get(`/api/users/${id}`);
-      expect(response.statusCode).to.equal(200);
-      expect(response.body.message).to.equal("User obtained successfully");
-    });
-    it("It should not get any information if there is no id", async () => {
-      const response = await chai.request(app).get(`/api/users/0`);
-      expect(response.statusCode).to.equal(400);
-    });
+  before((done) => {
+    chai
+      .request(app)
+      .post("/api/auth/login")
+      .send({
+        email: "jose@test.com",
+        password: "1234",
+      })
+      .end((err, res) => {
+        token = res.body.body.token;
+        done();
+      });
   });
 
-  describe("POST /users", () => {
-    it("should create user", async () => {
-      const response = await chai.request(app).post(`/api/users`).send(users);
-      expect(response.status).to.equal(200);
-      expect(response.body.message).to.equal("Users was created");
-    });
-    it("should not create user without name and description fields", async () => {
-      const response = await chai.request(app).post(`/api/users`).send({});
-      expect(response.status).to.equal(400);
-    });
-  });
-
-  describe("PUT /users", () => {
-    it("must edit users with id if contain firstName, lastName, email, avatar and roleId fields", async () => {
-      const id = 23;
-      const response = await chai
+  suite("create User ", function () {
+    test("succesfull creation of user", function (done) {
+      chai
         .request(app)
-        .put(`/api/users/${id}`)
-        .send(users);
-      expect(response.statusCode).to.equal(200);
-      expect(response.body.message).to.equal("User was edited");
+        .post("/api/users")
+        .send(createUser)
+        .end((err, res) => {
+          assert.equal(res.status, 200);
+          done();
+        });
     });
-    it("must respond error due to missing fields", async () => {
-      const id = 5;
-      const response = await chai.request(app).put(`/api/users/${id}`).send({});
-      expect(response.statusCode).to.equal(400);
+
+    test("Email already exists ", function (done) {
+      chai
+        .request(app)
+        .post("/api/users")
+        .send(createUser)
+        .end((err, res) => {
+          assert.equal(res.status, 400);
+          done();
+        });
+    });
+
+    test("Validation Errors", function (done) {
+      chai
+        .request(app)
+        .post("/api/users")
+        .send({})
+        .end((err, res) => {
+          assert.equal(res.status, 400);
+          done();
+        });
     });
   });
-  describe("DELETE /categories", () => {
-    it("you must delete category with id", async () => {
-      const id = 9;
-      const response = await chai.request(app).delete(`/api/categories/${id}`);
-      expect(response.statusCode).to.equal(200);
-      expect(response.body.message).to.equal("Categories deleted successfully");
+
+  suite("Update User", function () {
+    test("Successfull user update", function (done) {
+      chai
+        .request(app)
+        .put(`/api/users/${UserID}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send(updateUsers)
+        .end((err, res) => {
+          assert.equal(res.status, 200);
+          done();
+        });
     });
-    it("should respond error for not finding Id to delete", async () => {
-      const response = await chai.request(app).delete(`/api/categories/0`);
-      expect(response.statusCode).to.equal(401);
+    test("Trying update inexistent User", function (done) {
+      chai
+        .request(app)
+        .put("/api/users/0")
+        .set("Authorization", `Bearer ${token}`)
+        .send(updateUsers)
+        .end((err, res) => {
+          assert.equal(res.status, 403);
+          done();
+        });
+    });
+  });
+
+  suite("Get Users", function () {
+    test("Get user by ID", function (done) {
+      chai
+        .request(app)
+        .get(`/api/users/${UserID}`)
+        .set("Authorization", `Bearer ${token}`)
+        .end((err, res) => {
+          assert.equal(res.status, 200);
+          //   assert.equal(res.body.message, "User retrieved successfully");
+          done();
+        });
+    });
+    test("Get All Users", function (done) {
+      chai
+        .request(app)
+        .get("/api/users/")
+        .set("Authorization", `Bearer ${token}`)
+        .end((err, res) => {
+          assert.equal(res.status, 200);
+          done();
+        });
+    });
+    test("Trying to get Unexistent User", function (done) {
+      chai
+        .request(app)
+        .get("/api/users/0")
+        .set("Authorization", `Bearer ${token}`)
+        .end((err, res) => {
+          assert.equal(res.status, 403);
+          done();
+        });
+    });
+  });
+
+  suite("Delete User", function () {
+    test("succesfully delete User", function (done) {
+      chai
+        .request(app)
+        .delete(`/api/users/${UserID}`)
+        .set("Authorization", `Bearer ${token}`)
+        .end((err, res) => {
+          assert.equal(res.status, 200);
+          assert.equal(res.body.message, "User deleted successfully");
+          done();
+        });
+    });
+    test("Trying to delete unexistent user", function (done) {
+      chai
+        .request(app)
+        .delete("/api/users/0")
+        .set("Authorization", `Bearer ${token}`)
+        .end((err, res) => {
+          assert.equal(res.status, 403);
+          done();
+        });
     });
   });
 });
