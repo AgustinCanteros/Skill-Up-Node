@@ -1,93 +1,265 @@
-var chai = require("chai");
-let chaiHttp = require("chai-http");
-var expect = require("chai").expect;
+const chaiHTTP = require("chai-http");
+const chai = require("chai");
+const { assert } = require("chai");
+const { suite, test } = require("mocha");
+const app = require("../app");
 
-let app = require("../app");
+chai.use(chaiHTTP);
 
-chai.use(chaiHttp);
-
-const transactions = {
-  description: "impuesto",
-  amount: 10,
-  userId: 3,
-  categoryId: 1,
-  date: "2022-11-06",
-};
-
-// parent block
-describe("Test endpoints transactions", () => {
-  describe("GET /transactions", () => {
-    it("It should give all transactions information", async () => {
-      const response = await chai.request(app).get("/api/transactions");
-      expect(response.statusCode).to.equal(200);
-      expect(response.body.message).to.equal("Users obtained successfully");
-      expect(response).to.have.property("body");
-    });
-    it("get transactions by id", async () => {
-      const id = 1;
-      const response = await chai.request(app).get(`/api/transactions/${id}`);
-      expect(response.statusCode).to.equal(200);
-      expect(response.body.message).to.equal(
-        "transactions obtained successfully"
-      );
-    });
-    it("It should not get any information if there is no id", async () => {
-      const response = await chai.request(app).get(`/api/transactions/0`);
-      expect(response.statusCode).to.equal(400);
-    });
+suite("Test on transaction routes", function () {
+  const categoryBody = {
+    name: "testTransactionCat",
+    description: "testTransactionCat",
+  };
+  const userBody = {
+    firstName: "testTrasactionUser",
+    lastName: "testTrasactionUser",
+    email: "testTrasactionUser@email.com",
+    password: "testTrasactionUser",
+  };
+  let categoryID = 1;
+  let userID;
+  let transactionID;
+  let token;
+  // obtener token
+  before((done) => {
+    chai
+      .request(app)
+      .post("/api/auth/login")
+      .send({
+        email: "antonio@test.com",
+        password: "1234",
+      })
+      .end((err, res) => {
+        token = res.body.body.token;
+        done();
+      });
   });
 
-  describe("POST /transactions", () => {
-    it("should create transactions", async () => {
-      const response = await chai
-        .request(app)
-        .post(`/api/transactions`)
-        .send(transactions);
-      expect(response.status).to.equal(200);
-      expect(response.body.message).to.equal("transactions was created");
-    });
-    it("should not create transactions without name and description fields", async () => {
-      const response = await chai
-        .request(app)
-        .post(`/api/transactions`)
-        .send({});
-      expect(response.status).to.equal(400);
-    });
+  //  crear category temporal para pruebas
+  before((done) => {
+    chai
+      .request(app)
+      .post("/api/categories")
+      .set("Authorization", `Bearer ${token}`)
+      .send(categoryBody)
+      .end((err, res) => {
+        categoryID = res.body.body.id;
+        done();
+      });
   });
 
-  describe("PUT /transactions", () => {
-    it("must edit transactions with id if contain firstName, lastName, email, avatar and roleId fields", async () => {
-      const id = 23;
-      const response = await chai
+  suite("transaction POST Routes", function () {
+    test("Succesfully create transaction", function (done) {
+      chai
         .request(app)
-        .put(`/api/transactions/${id}`)
-        .send(transactions);
-      expect(response.statusCode).to.equal(200);
-      expect(response.body.message).to.equal("transactions was edited");
+        .post("/api/transactions")
+        .set("Authorization", `Bearer ${token}`)
+        .send({
+          amount: 5000,
+          date: "2022/10/28",
+          user: userID,
+          category: categoryID,
+          description: "testDescription",
+        })
+        .end((err, res) => {
+          assert.equal(res.status, 200);
+          done();
+        });
     });
-    it("must respond error due to missing fields", async () => {
-      const id = 5;
-      const response = await chai
+    test("Trying to Post transaction with invalid UserID", function (done) {
+      chai
         .request(app)
-        .put(`/api/transactions/${id}`)
-        .send({});
-      expect(response.statusCode).to.equal(400);
+        .post("/api/transactions")
+        .set("Authorization", `Bearer ${token}`)
+        .send({
+          amount: 5000,
+          date: "2022/10/28",
+          user: 0,
+          category: categoryID,
+        })
+        .end((err, res) => {
+          assert.equal(res.status, 400);
+          done();
+        });
+    });
+    test("Trying to Post transaction with invalid categoryID", function (done) {
+      chai
+        .request(app)
+        .post("/api/transactions")
+        .set("Authorization", `Bearer ${token}`)
+        .send({
+          amount: 5000,
+          date: "2022/10/28",
+          user: userID,
+          category: 0,
+        })
+        .end((err, res) => {
+          assert.equal(res.status, 400);
+          done();
+        });
+    });
+    test("Validation Error", function (done) {
+      chai
+        .request(app)
+        .post("/api/transactions")
+        .set("Authorization", `Bearer ${token}`)
+        .send({
+          amount: "",
+          date: "",
+          user: userID,
+          category: categoryID,
+        })
+        .end((err, res) => {
+          assert.equal(res.status, 400);
+          done();
+        });
     });
   });
-  describe("DELETE /transactions", () => {
-    it("you must delete transactions with id", async () => {
-      const id = 6;
-      const response = await chai
+  suite("transtaction UPDATE Routes", function () {
+    test("Successfuly update transaction", function (done) {
+      chai
         .request(app)
-        .delete(`/api/transactions/${id}`);
-      expect(response.statusCode).to.equal(200);
-      expect(response.body.message).to.equal(
-        "transactions deleted successfully"
-      );
+        .put(`/api/transactions/${transactionID}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send({
+          amount: 1,
+          date: "2022/10/28",
+          user: userID,
+          category: categoryID,
+        })
+        .end((err, res) => {
+          assert.equal(res.status, 200);
+          done();
+        });
     });
-    it("should respond error for not finding Id to delete", async () => {
-      const response = await chai.request(app).delete(`/api/transactions/0`);
-      expect(response.statusCode).to.equal(400);
+    test("trying to update transaction with invalid categoryID", function (done) {
+      chai
+        .request(app)
+        .put(`/api/transactions/${transactionID}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send({
+          amount: 5000,
+          date: "2022/10/28",
+          user: userID,
+          category: 0,
+        })
+        .end((err, res) => {
+          assert.equal(res.status, 400);
+          done();
+        });
     });
+    test("trying to update transaction with invalid userID", function (done) {
+      chai
+        .request(app)
+        .put(`/api/transactions/${transactionID}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send({
+          amount: 5000,
+          date: "2022/10/28",
+          user: 0,
+          category: categoryID,
+        })
+        .end((err, res) => {
+          assert.equal(res.status, 400);
+          done();
+        });
+    });
+    test("trying to update invalid transactionID", function (done) {
+      chai
+        .request(app)
+        .put("/api/transactions/0")
+        .set("Authorization", `Bearer ${token}`)
+        .send({
+          amount: 5000,
+          date: "2022/10/28",
+          user: 0,
+          category: categoryID,
+        })
+        .end((err, res) => {
+          assert.equal(res.status, 400);
+          done();
+        });
+    });
+  });
+  suite("Get transactions GET routes", function () {
+    test("", function (done) {
+      chai
+        .request(app)
+        .get("/api/transactions")
+        .set("Authorization", `Bearer ${token}`)
+        .end((err, res) => {
+          assert.equal(res.status, 200);
+          done();
+        });
+    });
+    test("Get transactions by ID", function (done) {
+      chai
+        .request(app)
+        .get(`/api/transactions/${transactionID}`)
+        .set("Authorization", `Bearer ${token}`)
+        .end((err, res) => {
+          assert.equal(res.status, 200);
+          done();
+        });
+    });
+    test("Trying to get unexistent transaction", function (done) {
+      chai
+        .request(app)
+        .get("/api/transactions/0")
+        .set("Authorization", `Bearer ${token}`)
+        .end((err, res) => {
+          assert.equal(res.status, 400);
+          done();
+        });
+    });
+  });
+  suite("Delete transaction DELETE routes", function () {
+    test("Succesfully delete transactions", function (done) {
+      chai
+        .request(app)
+        .delete(`/api/transactions/${transactionID}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send()
+        .end((err, res) => {
+          assert.equal(res.status, 200);
+          done();
+        });
+    });
+    test("trying to delete with invalid  transaction ID", function (done) {
+      chai
+        .request(app)
+        .delete("/api/transactions/0")
+        .set("Authorization", `Bearer ${token}`)
+        .send()
+        .end((err, res) => {
+          assert.equal(res.status, 400);
+          done();
+        });
+    });
+  });
+  // Borrar usuario de prueba
+  after((done) => {
+    chai
+      .request(app)
+      .delete(`/api/users/${userID}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send()
+      .end((err, res) => {
+        console.log("User testTrasactionUser@email.com DELETE successfully");
+        done();
+      });
+  });
+  // Borrar categoria de prueba
+  after((done) => {
+    chai
+      .request(app)
+      .delete(`/api/categories/${categoryID}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send()
+      .end((err, res) => {
+        console.log("User testTrasactionUser@email.com DELETE successfully");
+        done();
+      });
   });
 });

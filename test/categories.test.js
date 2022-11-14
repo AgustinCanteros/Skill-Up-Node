@@ -1,85 +1,140 @@
-var chai = require("chai");
-let chaiHttp = require("chai-http");
-var expect = require("chai").expect;
+const chaiHTTP = require("chai-http");
+const chai = require("chai");
+const { assert } = require("chai");
+const { suite, test } = require("mocha");
+const app = require("../app");
 
-let app = require("../app");
+chai.use(chaiHTTP);
 
-chai.use(chaiHttp);
+suite("Tests for Categories Routes", function () {
+  const testReqBody = {
+    name: "testCategory",
+    description: "testCategory",
+  };
+  const updateReqBody = {
+    name: "updateCategory",
+    description: "updateCategory",
+  };
+  let categoryID = 10;
+  let token;
 
-const categories = {
-  name: "Egreso",
-  description: "An amount of money a user receives into the account",
-};
-
-// parent block
-describe("Test endpoints categories", () => {
-  describe("GET /categories", () => {
-    it("It should give all categories information", async () => {
-      const response = await chai.request(app).get("/api/categories");
-      expect(response.statusCode).to.equal(200);
-      expect(response.body.message).to.equal(
-        "Found all categories successfully"
-      );
-      expect(response).to.have.property("body");
-    });
-    it("get category by id", async () => {
-      const id = 1;
-      const response = await chai.request(app).get(`/api/categories/${id}`);
-      expect(response.statusCode).to.equal(200);
-      expect(response.body.message).to.equal("Category retrieved successfully");
-    });
-    it("It should not get any information if there is no id", async () => {
-      const response = await chai.request(app).get(`/api/categories/0`);
-      expect(response.statusCode).to.equal(401);
-    });
+  before((done) => {
+    chai
+      .request(app)
+      .post("/api/auth/login")
+      .send({
+        email: "antonio@test.com",
+        password: "1234",
+      })
+      .end((err, res) => {
+        token = res.body.body.token;
+        done();
+      });
   });
 
-  describe("POST /categories", () => {
-    it("should create transaction", async () => {
-      const response = await chai
+  suite("Create categories: POST-route", function () {
+    test("Succesfully create category", function (done) {
+      chai
         .request(app)
-        .post(`/api/categories`)
-        .send(categories);
-      expect(response.status).to.equal(200);
-      expect(response.body.message).to.equal("Categories created successfully");
+        .post("/api/categories")
+        .set("Authorization", `Bearer ${token}`)
+        .send(testReqBody)
+        .end((err, res) => {
+          assert.equal(res.status, 200);
+          done();
+        });
     });
-    it("should not create transaction without name and description fields", async () => {
-      const response = await chai.request(app).post(`/api/categories`).send({});
-      expect(response.status).to.equal(400);
+    test("Validation Error", function (done) {
+      chai
+        .request(app)
+        .post("/api/categories")
+        .set("Authorization", `Bearer ${token}`)
+        .send({})
+        .end((err, res) => {
+          assert.equal(res.status, 400);
+          done();
+        });
     });
   });
-
-  describe("DELETE /categories", () => {
-    it("you must delete category with id", async () => {
-      const id = 3;
-      const response = await chai.request(app).delete(`/api/categories/${id}`);
-      expect(response.statusCode).to.equal(200);
-      expect(response.body.message).to.equal("Categories deleted successfully");
+  suite("Update categories: PUT-route", function () {
+    test("Succesfully Update category", function (done) {
+      chai
+        .request(app)
+        .put(`/api/categories/${categoryID}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send(updateReqBody)
+        .end((err, res) => {
+          assert.equal(res.status, 200);
+          done();
+        });
     });
-    it("should respond error for not finding Id to delete", async () => {
-      const response = await chai.request(app).delete(`/api/categories/0`);
-      expect(response.statusCode).to.equal(401);
+    test("Trying to update unexistent category", function (done) {
+      chai
+        .request(app)
+        .put("api/categories/0")
+        .set("Authorization", `Bearer ${token}`)
+        .send(updateReqBody)
+        .end((err, res) => {
+          assert.equal(res.status, 400);
+          done();
+        });
     });
   });
-
-  describe("PUT /categories", () => {
-    it("must edit transaction with id if contain name and description fields", async () => {
-      const id = 4;
-      const response = await chai
+  suite("Get categories: GET-route", function () {
+    test("Get all categories", function (done) {
+      chai
         .request(app)
-        .put(`/api/categories/${id}`)
-        .send(categories);
-      expect(response.statusCode).to.equal(200);
-      expect(response.body.message).to.equal("Categories update successfully");
+        .get("api/categories")
+        .set("Authorization", `Bearer ${token}`)
+        .send(updateReqBody)
+        .end((err, res) => {
+          assert.equal(res.status, 200);
+          done();
+        });
     });
-    it("must respond error due to missing fields", async () => {
-      const id = 4;
-      const response = await chai
+    test("Get categories by ID", function (done) {
+      chai
         .request(app)
-        .put(`/api/categories/${id}`)
-        .send({});
-      expect(response.statusCode).to.equal(400);
-      // expect(response.body.message).to.equal("Categories update successfully");
+        .get(`api/categories/${categoryID}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send(updateReqBody)
+        .end((err, res) => {
+          assert.equal(res.status, 200);
+          done();
+        });
+    });
+    test("trying to get unexistent categories", function (done) {
+      chai
+        .request(app)
+        .get("/api/categories/0")
+        .set("Authorization", `Bearer ${token}`)
+        .send(updateReqBody)
+        .end((err, res) => {
+          assert.equal(res.status, 401);
+          done();
+        });
+    });
+  });
+  suite("Delete categories", function () {
+    test("succesfully delete category", function (done) {
+      chai
+        .request(app)
+        .delete(`/api/categories/${categoryID}`)
+        .set("Authorization", `Bearer ${token}`)
+        .end((err, res) => {
+          assert.equal(res.status, 200);
+          done();
+        });
+    });
+    test("Trying to delete unexistent user", function (done) {
+      chai
+        .request(app)
+        .delete("/api/categories/0")
+        .set("Authorization", `Bearer ${token}`)
+        .end((err, res) => {
+          assert.equal(res.status, 401);
+          done();
+        });
     });
   });
 });
